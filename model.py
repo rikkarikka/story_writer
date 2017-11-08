@@ -64,7 +64,7 @@ class Model(nn.Module):
       op = self.tanh(self.attn_out(attnq))
       op = self.drop(op)
       #generate
-      gen = self.drop(self.generate(attnq))
+      gen = self.drop(attnq)#self.generate(attnq))
       outputs.append(gen)
       attentions.append(attn_w)
     outputs = torch.stack(outputs)

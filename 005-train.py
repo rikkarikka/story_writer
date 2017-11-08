@@ -19,6 +19,28 @@ def main():
     else:
         print('Previously Trained')
 
+def memoryEfficientLoss(outputs, targets, generator, crit, eval=False):
+    # compute generations one piece at a time
+    num_correct, loss = 0, 0
+    outputs = Variable(outputs.data, requires_grad=(not eval), volatile=eval)
+
+    batch_size = outputs.size(1)
+    outputs_split = torch.split(outputs, opt.max_generator_batches)
+    targets_split = torch.split(targets, opt.max_generator_batches)
+    for i, (out_t, targ_t) in enumerate(zip(outputs_split, targets_split)):
+        out_t = out_t.view(-1, out_t.size(2))
+        scores_t = generator(out_t)
+        loss_t = crit(scores_t, targ_t.view(-1))
+        pred_t = scores_t.max(1)[1]
+        num_correct_t = pred_t.data.eq(targ_t.data).masked_select(targ_t.ne(onmt.Constants.PAD).data).sum()
+        num_correct += num_correct_t
+        loss += loss_t.data[0]
+        if not eval:
+            loss_t.div(batch_size).backward()
+
+    grad_output = None if outputs.grad is None else outputs.grad.data
+return loss, grad_output, num_correct
+
 def train(args):
     ###############################################################################
     # Load data
@@ -100,7 +122,7 @@ def train(args):
             print("PREDS: ",preds.size())
             preds = preds.view(-1,preds.size(2))
             #print("LABELS: ",batch.label.size())
-            loss = criterion(preds, batch.label.view(-1))
+            loss,grad,numcorrect = memoryEfficientLoss(preds, batch.label.view(-1)), model.generate,criterion)
             loss.backward()
             optimizer.step()
             losses.append(loss)
