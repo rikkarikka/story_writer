@@ -80,7 +80,7 @@ def train(args):
     cuda = int(torch.cuda.is_available())-1
 
     TEXT = data.Field(lower=True,init_token="<start>",eos_token="<end>")
-    LABELS = data.Field()#lower=True,init_token="<start>",eos_token="<end>")
+    LABELS = data.Field(lower=True,init_token="<start>",eos_token="<end>")
 
     train, val, test = data.TabularDataset.splits(
         path='./', train='train.txt',
