@@ -46,11 +46,9 @@ class Model(nn.Module):
     for i in range(outp.size(1)): 
       o = outp[:,i,:]
       decin = torch.cat((o,op),1).unsqueeze(1)
-      print(decin.size())
       dec,h = self.dgru(decin,h)
       #attn
       q = dec.squeeze(1)
-      print(q.size())
       q = self.attn_in(q).unsqueeze(2)
       attn_w = torch.bmm(enc,q).squeeze(2)
       #TODO:masking goes here
@@ -59,8 +57,6 @@ class Model(nn.Module):
       attn = torch.bmm(attn,enc)
       attn = attn.squeeze(1)
       attnq = torch.cat((attn,q),1).squeeze()
-      print(attnq.size())
-      print(self.hidden_size)
       op = self.tanh(self.attn_out(attnq))
       op = self.drop(op)
       #generate

@@ -8,7 +8,7 @@ from torch.autograd import Variable
 
 import model as m
 from torchtext import data, datasets
-from evalTest import eval,test
+#from evalTest import eval,test
 from torchtext.vocab import GloVe
 from vecHandler import Vecs
 
@@ -19,27 +19,59 @@ def main():
     else:
         print('Previously Trained')
 
+def evaluate(data_iter, model,vecs,TEXT,LABELS,criterion,emb_dim):
+    model.eval()
+    corrects, avg_loss, t5_corrects, rr = 0, 0, 0, 0
+    for batch_count,batch in enumerate(data_iter):
+        #print('avg_loss:', avg_loss)
+        inp, target = batch.text, batch.label
+        inp.data.t_()#, target.data.sub_(1)  # batch first, index align
+        inp3d = torch.cuda.FloatTensor(inp.size(0),inp.size(1),emb_dim)
+        for i in range(inp.size(0)):
+          for j in range(inp.size(1)):
+            inp3d[i,j,:] = vecs[TEXT.vocab.itos[inp[i,j].data[0]]]
+        #if args.cuda:
+        #    feature, target = feature.cuda(), target.cuda()
+
+        outp = batch.label.t()
+        outp3d = torch.cuda.FloatTensor(outp.size(0),outp.size(1),emb_dim)
+        for i in range(outp.size(0)):
+          for j in range(outp.size(1)):
+            outp3d[i,j,:] = vecs[LABELS.vocab.itos[outp[i,j].data[0]]]
+
+        preds, attns = model(Variable(inp3d),Variable(outp3d,requires_grad=False))
+        loss,grad,numcorrect = memoryEfficientLoss(preds, batch.label, model.generate,criterion,eval=True)
+
+        avg_loss += loss
+
+    size = len(data_iter.dataset)
+    avg_loss = avg_loss/size
+    model.train()
+    print("EVAL: ",avg_loss)
+
+    return avg_loss#, accuracy, corrects, size, t5_acc, t5_corrects, mrr);
+
 def memoryEfficientLoss(outputs, targets, generator, crit, eval=False):
-    # compute generations one piece at a time
-    num_correct, loss = 0, 0
-    outputs = Variable(outputs.data, requires_grad=(not eval), volatile=eval)
+  # compute generations one piece at a time
+  num_correct, loss = 0, 0
+  outputs = Variable(outputs.data, requires_grad=(not eval), volatile=eval)
 
-    batch_size = outputs.size(1)
-    outputs_split = torch.split(outputs, opt.max_generator_batches)
-    targets_split = torch.split(targets, opt.max_generator_batches)
-    for i, (out_t, targ_t) in enumerate(zip(outputs_split, targets_split)):
-        out_t = out_t.view(-1, out_t.size(2))
-        scores_t = generator(out_t)
-        loss_t = crit(scores_t, targ_t.view(-1))
-        pred_t = scores_t.max(1)[1]
-        num_correct_t = pred_t.data.eq(targ_t.data).masked_select(targ_t.ne(onmt.Constants.PAD).data).sum()
-        num_correct += num_correct_t
-        loss += loss_t.data[0]
-        if not eval:
-            loss_t.div(batch_size).backward()
+  batch_size = outputs.size(1)
+  outputs_split = torch.split(outputs, 32)
+  targets_split = torch.split(targets, 32)
+  for i, (out_t, targ_t) in enumerate(zip(outputs_split, targets_split)):
+    out_t = out_t.view(-1, out_t.size(2))
+    scores_t = generator(out_t)
+    loss_t = crit(scores_t, targ_t.view(-1))
+    pred_t = scores_t.max(1)[1]
+    #num_correct_t = pred_t.data.eq(targ_t.data).masked_select(targ_t.ne(onmt.Constants.PAD).data).sum()
+    #num_correct += num_correct_t
+    loss += loss_t.data[0]
+    if not eval:
+      loss_t.div(batch_size).backward()
 
-    grad_output = None if outputs.grad is None else outputs.grad.data
-return loss, grad_output, num_correct
+  grad_output = None if outputs.grad is None else outputs.grad.data
+  return loss, grad_output, num_correct
 
 def train(args):
     ###############################################################################
@@ -103,6 +135,7 @@ def train(args):
         losses = []
         tot_loss = 0
         train_iter.repeat=False
+        avg_loss = evaluate(val_iter, model,vecs,TEXT,LABELS,criterion,args.emb_dim)
         for batch_count,batch in enumerate(train_iter):
             model.zero_grad()
             inp = batch.text.t()
@@ -111,60 +144,27 @@ def train(args):
               for j in range(inp.size(1)):
                 inp3d[i,j,:] = vecs[TEXT.vocab.itos[inp[i,j].data[0]]]
             outp = batch.label.t()
-            print("OUTP: ",outp.size())
             outp3d = torch.cuda.FloatTensor(outp.size(0),outp.size(1),args.emb_dim)
             for i in range(outp.size(0)):
               for j in range(outp.size(1)):
                 outp3d[i,j,:] = vecs[LABELS.vocab.itos[outp[i,j].data[0]]]
-            print("INP: ",inp.size())
 
             preds, attns = model(Variable(inp3d),Variable(outp3d,requires_grad=False))
-            print("PREDS: ",preds.size())
-            preds = preds.view(-1,preds.size(2))
-            #print("LABELS: ",batch.label.size())
-            loss,grad,numcorrect = memoryEfficientLoss(preds, batch.label.view(-1)), model.generate,criterion)
-            loss.backward()
+            loss,grad,numcorrect = memoryEfficientLoss(preds, batch.label, model.generate,criterion)
             optimizer.step()
             losses.append(loss)
-            tot_loss += loss.data[0]
+            tot_loss += loss
 
-            #if (batch_count % 20 == 0):
-            #    print('Batch: ', batch_count, '\tLoss: ', str(losses[-1].data[0]))
+            if (batch_count % 20 == 0):
+                print('Batch: ', batch_count, '\tLoss: ', str(losses[-1]))
         #print('Average loss over epoch ' + str(epoch) + ': ' + str(tot_loss/len(losses)))
-        (avg_loss, accuracy, corrects, size, t5_acc, t5_corrects, mrr) = eval(val_iter, model,vecs,TEXT,args.emb_dim)#, args.device)
-        if accuracy > args.acc_thresh:
-            save_path = '{}/acc{:.2f}_e{}.pt'.format(args.save_path_full, accuracy, epoch)
-            if not os.path.isdir(args.save_path_full):
-                os.makedirs(args.save_path_full)
-            torch.save(model, save_path)
-
-        if highest_t1_acc < accuracy:
-            highest_t1_acc = accuracy
-            highest_t1_acc_metrics = ('acc: {:6.4f}%({:3d}/{}) EPOCH{:2d} - loss: {:.4f} t5_acc: {:6.4f}%({:3d}' \
-                    '/{}) MRR: {:.6f}'.format(accuracy, corrects, size,epoch, avg_loss, t5_acc, t5_corrects, size, mrr))
-
-            highest_t1_acc_params = (('PARAMETERS:' \
-                    'net-%s' \
-                    '_e%i' \
-                    '_bs%i' \
-                    '_opt-%s' \
-                    '_ly%i' \
-                    '_hs%i' \
-                    '_dr%i'
-                    '_ed%i' \
-                    '_femb%s' \
-                    '_ptemb%s' \
-                    '_drp%.1f' \
-                    '_mf%d\n'
-                    % (args.net_type, args.epochs, args.batch_size, args.opt, args.num_layers,
-                    args.hidden_sz, args.num_dir, args.emb_dim, args.embfix, args.pretr_emb, args.dropout, args.mf)))
-        results += ('\nEPOCH{:2d} - loss: {:.4f}  acc: {:6.4f}%({:3d}/{}) t5_acc: {:6.4f}%({:3d}' \
-                '/{}) MRR: {:.6f}'.format(epoch, avg_loss, accuracy,
-                                        corrects, size, t5_acc, t5_corrects, size,
-                                        mrr))
-
-    print(highest_t1_acc_metrics + '\n')
-    writeResults(args, results, highest_t1_acc, highest_t1_acc_metrics, highest_t1_acc_params)
+        #(avg_loss, accuracy, corrects, size, t5_acc, t5_corrects, mrr) = eval(val_iter, model,vecs,TEXT,args.emb_dim)#, args.device)
+        avg_loss = evaluate(val_iter, model,vecs,TEXT,LABELS,criterion,args.emb_dim)
+        save_path = '{}/acc{:.2f}_e{}.pt'.format(args.save_path_full, avg_loss, epoch)
+        if not os.path.isdir(args.save_path_full):
+            os.makedirs(args.save_path_full)
+        torch.save(model, save_path)
+        print("Model Saved at ",save_path)
 
 def writeResults(args, results, highest_t1_acc, highest_t1_acc_metrics, highest_t1_acc_params):
     if not os.path.isdir(args.save_path_full):
