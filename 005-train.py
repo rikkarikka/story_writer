@@ -88,12 +88,19 @@ def train(args):
             for i in range(inp.size(0)):
               for j in range(inp.size(1)):
                 inp3d[i,j,:] = vecs[TEXT.vocab.itos[inp[i,j].data[0]]]
-            #print("INP: ",inp.size())
+            outp = batch.label.t()
+            print("OUTP: ",outp.size())
+            outp3d = torch.cuda.FloatTensor(outp.size(0),outp.size(1),args.emb_dim)
+            for i in range(outp.size(0)):
+              for j in range(outp.size(1)):
+                outp3d[i,j,:] = vecs[LABELS.vocab.itos[outp[i,j].data[0]]]
+            print("INP: ",inp.size())
 
-            preds = model(Variable(inp3d))
-            #print("PREDS: ",preds.size())
+            preds, attns = model(Variable(inp3d),Variable(outp3d,requires_grad=False))
+            print("PREDS: ",preds.size())
+            preds = preds.view(-1,preds.size(2))
             #print("LABELS: ",batch.label.size())
-            loss = criterion(preds, batch.label)
+            loss = criterion(preds, batch.label.view(-1))
             loss.backward()
             optimizer.step()
             losses.append(loss)
