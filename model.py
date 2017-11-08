@@ -27,13 +27,13 @@ class Model(nn.Module):
         hx.data = hx.data.cuda()
     return hx
 
-  def forward(self, inp, outp):
+  def forward(self, inp):
     he = self.get_hx(inp.size(0))
     enc,h = self.egru(inp,he)
     #enc hidden has bidirection so switch those to the features dim
     h = torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) 
     outputs = []
-    op = outp[0]
+    op = torch.Variable(torch.cuda.FloatTensor(inp.size(0),self.hidden_size*2).zero_(), requires_grad=False)
     for o in outp[1:]: 
       op = op.unsqueeze(0)
       h = self.dgru(op,h)
