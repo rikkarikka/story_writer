@@ -11,6 +11,7 @@ from torchtext import data, datasets
 #from evalTest import eval,test
 from torchtext.vocab import GloVe
 from vecHandler import Vecs
+from 006-generate import generate
 
 def main():
     args = parseParams()
@@ -48,6 +49,7 @@ def evaluate(data_iter, model,vecs,TEXT,LABELS,criterion,emb_dim):
     avg_loss = avg_loss/size
     model.train()
     print("EVAL: ",avg_loss)
+    generate(val_iter, model, vecs, TEXT, LABELS, 300)
 
     return avg_loss#, accuracy, corrects, size, t5_acc, t5_corrects, mrr);
 
