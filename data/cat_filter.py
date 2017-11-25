@@ -9,6 +9,7 @@ with open("train.txt") as f:
   for l in f:
     lcats = [x for x in cats if x in l]
     cats= [x for x in cats if x not in lcats]
-print(cats)
+with open("traincats.txt") as f:
+  f.write('\n'.join(cats))
   
 print(len(cats))

@@ -1,91 +1,229 @@
 import sys
-import argparse
+import os
 import torch
+from itertools import product
 from torch import nn
 from torch.autograd import Variable
-from predata import load_data
-
+from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
+from e_preprocess import load_data, vecs
+#from gumbel_softmax import *
+from gumbel_softmax import gumbel
+from arguments import parseParams
 
 class model(nn.Module):
   def __init__(self,args):
     super().__init__()
     self.args = args
     self.enc = nn.LSTM(300,args.hsz//2,bidirectional=True,num_layers=args.layers,batch_first=True)
-    self.enclin = nn.Linear(args.hsz*args.layers,300)
+    self.decemb = nn.Embedding(args.vsz,args.hsz,padding_idx=0)
+    self.dec = nn.LSTM(args.hsz*2,args.hsz,num_layers=args.layers,batch_first=True)
+    self.gen = nn.Linear(args.hsz,args.vsz)
+    self.linin = nn.Linear(args.hsz,args.hsz)
     self.sm = nn.Softmax()
+    self.linout = nn.Linear(args.hsz*3,args.hsz)
+    self.tanh = nn.Tanh()
+    self.drop = nn.Dropout(args.drop)
+    self.preout = nn.Linear
 
   def mkevents(self,em):
     self.em = Variable(em.unsqueeze(0).expand(self.args.bsz,em.size(0),em.size(1)))
+    self.g = gumbel(self.em.size())
 
-  def forward(self,inp,out=None):
+  def forward(self,inp,mask,out=None):
     enc,(h,c) = self.enc(inp)
-    h = h.permute(1,0,2).contiguous()
-    h = h.view(h.size(0),-1)
-    encdown = self.enclin(h).unsqueeze(1)
+    if inp.size(0) != self.args.bsz:
+      em = self.em[:inp.size(0)]
+    else:
+      em = self.em
 
+    #enc hidden has bidirection so switch those to the features dim
+    h = torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) 
+    c = torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) 
+
+    #get some extra words in there
     #calculate event attentions
-    eW = torch.bmm(encdown,self.em.permute(0,2,1)).squeeze()
-    #eW = self.sm(eW)
+    #enc.data.masked_fill_(mask, -float('inf'))
+    #todo fix encoder masking
+    eW,_ = torch.max(torch.bmm(enc,em.permute(0,2,1)),1)
+    eW = self.sm(eW)
+    eWW = eW.unsqueeze(2).expand(eW.size(0),eW.size(1),self.args.hsz)
+    Vattn = torch.mul(eWW,em)
+    # sample gumbel
+    if out is None:
+      gumb = Vattn
+    else:
+      gumb = self.g.gumbel_softmax(Vattn,self.args.temperature)
+    # use idxs maybe somehow?
+    preds,_ = torch.topk(gumb,5,1)
 
-    return eW
+    #decode
+    op = Variable(torch.cuda.FloatTensor(inp.size(0),self.args.hsz).zero_())
+    outputs = []
+    if out is None:
+      outp = self.args.maxlen
+    else:
+      outp = out.size(1)
 
-def init_vocab(M,DS,vocab):
+    for i in range(outp): 
+      if i == 0:
+        prev = Variable(torch.cuda.LongTensor(inp.size(0),1).fill_(3))
+      else:
+        if out is None:
+          prev = self.gen(op).max(2)
+          prev = prev[1]
+        else:
+          prev = out[:,i-1].unsqueeze(1)
+        op = op.squeeze()
+          
+      dembedding = self.decemb(prev)
+      decin = torch.cat((dembedding.squeeze(),op),1).unsqueeze(1)
+      decout, (h,c) = self.dec(decin,(h,c))
+
+      #op = decout
+      #outputs.append(self.gen(decout))
+
+      #attend on enc 
+      #q = self.linin(decout.squeeze(1)).unsqueeze(2)
+      q = decout.view(decout.size(0),decout.size(2),decout.size(1))
+      w = torch.bmm(enc,q).squeeze(2)
+      w.data.masked_fill_(mask, -float('inf'))
+      w = self.sm(w)
+      context = torch.bmm(w.unsqueeze(1),enc)
+      
+      # attend on preds
+      pw = torch.bmm(preds,q).squeeze(2)
+      pw = self.sm(pw)
+      pcontext = torch.bmm(pw.unsqueeze(1),preds)
+
+      op = torch.cat((pcontext,context,decout),2)
+      op = self.drop(self.tanh(self.linout(op)))
+      outputs.append(self.gen(op))
+
+    outputs = torch.cat(outputs,1)
+    return outputs
+
+
+def init_vocab(M,DS,args):
+  #get a vsz x dim matrix to give to the model
+  with open(args.eventvocab) as f:
+    vocab = f.read().strip().lower().split("\n")
   matrix = DS.matrix(vocab).cuda()
   M.mkevents(matrix)
 
-def parseParams():
-  parser = argparse.ArgumentParser(description='none')
-  parser.add_argument('-layers', type=int, default=2, help='min_freq for vocab [default: 1]') 
-  parser.add_argument('-drop', type=float, default=0.3, help='min_freq for vocab [default: 1]') 
-  parser.add_argument('-bsz', type=int, default=50, help='min_freq for vocab [default: 1]') 
-  parser.add_argument('-hsz', type=int, default=500, help='min_freq for vocab [default: 1]')
-  parser.add_argument('-lr', type=float, default=0.001, help='initial learning rate [default: 0.001]') 
-  parser.add_argument('-epochs', type=int, default=10, help='number of epochs for train [default: 100]') 
-  args = parser.parse_args()
-  return args
- 
-def train(M,DS,optimizer): 
-  losses = []
-  criterion = nn.MSELoss()
-  for source, target, _ in DS.train_batches:
-    M.zero_grad()
-    preds = M(Variable(source).cuda())
-    loss = criterion(preds,Variable(target).cuda())
-    loss.backward()
-    optimizer.step()
-    losses.append(loss.data)
-  return sum(losses)/len(losses)
-    
-def valid(M,DS,epoch,best=1):
+
+def validate(M,DS,args):
+  data = DS.val_batches
+  weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
+  cc = SmoothingFunction()
   M.eval()
-  losses = []
-  criterion = nn.MSELoss()
-  for source, target, _ in DS.val_batches:
-    preds = M(Variable(source).cuda())
-    loss = criterion(preds.view(-1),Variable(target).cuda().view(-1))
-    losses.append(loss.data)
-    out = torch.stack([torch.mul(preds.data,target.cuda()).sum(1),target.cuda().sum(1)],1)
-  losses = sum(losses)/len(losses)
-  print("Val loss ",losses[0])
-  if losses[0] < best:
-    best = losses[0]
-    torch.save(M,"pretrained/best.state_dict")
+  refs = []
+  hyps = []
+  for x in data:
+    sources, targets,mask = DS.vec_batch(x,targ=False)
+    sources = Variable(sources.cuda(),+1)
+    M.zero_grad()
+    logits = M(sources,mask,None)
+    #outs = M(sources,None)
+    #logits = M.gen(outs)
+    logits = torch.max(logits.data.cpu(),2)[1]
+    logits = [list(x) for x in logits]
+    hyp = [x[:x.index(1)+1] if 1 in x else x for x in logits]
+    hyp = [[DS.vocab[x] for x in y] for y in hyp]
+    hyps.extend(hyp)
+    refs.extend(targets)
+  bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
   M.train()
-  return best
-  
+  with open("saved_models/s2s/hyps"+args.epoch,'w') as f:
+    hyps = [' '.join(x) for x in hyps]
+    f.write('\n'.join(hyps))
+  try:
+    os.stat("saved_models/s2s/refs")
+  except:
+    with open("saved_models/s2s/refs"+args.epoch,'w') as f:
+      refstr = []
+      for r in refs:
+        r = [' '.join(x) for x in r]
+        refstr.append('\n'.join(r))
+      f.write('\n'.join(refstr))
+  return bleu
+
+
+def train(M,DS,args,optimizer):
+  data = DS.train_batches
+  weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
+  weights[0] = 0
+  criterion = nn.CrossEntropyLoss(weights)
+  trainloss = []
+  for x in data:
+    sources, targets,mask = DS.vec_batch(x)
+    sources = Variable(sources.cuda())
+    targets = Variable(targets.cuda())
+    M.zero_grad()
+    logits = M(sources,mask,targets)
+    #outs = M(sources,targets)
+    #logits = M.gen(outs)
+    #targets = targets[:,1:].contiguous()
+    #logits = logits[:,:targets.size(1),:].contiguous()
+    logits = logits.view(-1,logits.size(2))
+    targets = targets.view(-1)
+
+    loss = criterion(logits, targets)
+    loss.backward()
+    trainloss.append(loss.data.cpu()[0])
+    optimizer.step()
+    '''
+    _,maxes = torch.max(logits,1)
+    maxes[targets.eq(0)]=1
+    #print(maxes.eq(targets).sum())
+    targets[targets.ne(0)]=1
+    #print(targets.sum())
+    '''
+    if len(trainloss)%100==99: print(trainloss[-1])
+  return sum(trainloss)/len(trainloss)
+
 def main():
-  best = 1
   args = parseParams()
-  with open("data/categories.txt") as f:
-    cats = f.read().strip().split('\n')
-  DS = load_data(50,cats,train="data/train.txt.phrases.pretrain",valid="data/valid.txt.phrases.pretrain")
-  M = model(args)
-  M = M.cuda()
-  init_vocab(M,DS,cats)
+  args.savestr = "saved_models/extra/"
+  try:
+    os.stat(args.savestr)
+  except:
+    os.mkdir(args.savestr)
+  if args.debug:
+    args.bsz=2
+    args.datafile = "data/multiref_debug.pt"
+  DS = torch.load(args.datafile)
+  DS.mkbatches(args.bsz)
+  args.vsz = DS.vsz
+  M = model(args).cuda()
+  init_vocab(M,DS,args)
+  print(M)
   optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
-  for e in range(args.epochs):
-    trainloss = train(M,DS,optimizer)
-    print(trainloss[0])
-    best = valid(M,DS,e,best)
+  for epoch in range(args.epochs):
+    args.epoch = str(epoch)
+    trainloss = train(M,DS,args,optimizer)
+    print("train loss epoch",epoch,trainloss)
+    b = validate(M,DS,args)
+    print("valid bleu ",b)
+    torch.save((M,optimizer),args.savestr+args.epoch+"_bleu-"+str(b))
+    args.temperature *= 0.5
+
+def parseParams():
+    parser = argparse.ArgumentParser(description='none')
+    # learning
+    parser.add_argument('-layers', type=int, default=2, help='min_freq for vocab [default: 1]') #
+    parser.add_argument('-drop', type=float, default=0.3, help='min_freq for vocab [default: 1]') #
+    parser.add_argument('-bsz', type=int, default=100, help='min_freq for vocab [default: 1]') #
+    parser.add_argument('-hsz', type=int, default=500, help='min_freq for vocab [default: 1]') #
+    parser.add_argument('-maxlen', type=int, default=75, help='min_freq for vocab [default: 1]') #
+    parser.add_argument('-lr', type=float, default=0.001, help='initial learning rate [default: 0.001]') #
+    parser.add_argument('-epochs', type=int, default=30, help='number of epochs for train [default: 100]') #
+    parser.add_argument('-datafile', type=str, default="data/multiref.pt")
+    parser.add_argument('-debug', action="store_true")
+    parser.add_argument('-resume', type=str, default=None)
+    parser.add_argument('-eventvocab', type=str, default="data/verbnet_categories.txt")
+    parser.add_argument('-temperature', type=float, default=10)
+ 
+    args = parser.parse_args()
+    return args
 
 main()

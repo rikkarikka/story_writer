@@ -2,7 +2,6 @@ import sys
 import os
 import argparse
 import torch
-import torchtext
 from itertools import product
 from torch import nn
 from torch.autograd import Variable
@@ -25,78 +24,12 @@ def train(M,DS,args,optimizer):
     targets = targets[:,1:].contiguous()
     logits = logits[:,:targets.size(1),:].contiguous()
     logits = logits.view(-1,logits.size(2))
-    #if targets.size(1)>args.maxlen:
-    #  targets = targets[:,:args.maxlen].contiguous()
     targets = targets.view(-1)
     loss = criterion(logits, targets)
     loss.backward()
     trainloss.append(loss.data.cpu()[0])
     optimizer.step()
   return sum(trainloss)/len(trainloss)
-
-def validate(M,DS,args):
-  M.eval()
-  data = DS.val_batches
-  weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
-  weights[0] = 0
-  criterion = nn.CrossEntropyLoss(weights)
-  vloss = []
-  vbleu = []
-  for sources,targets in data:
-    sources = Variable(sources.cuda(),volatile=True)
-    targets = Variable(targets.cuda(),volatile=True)
-    M.zero_grad()
-    outs = M(sources)
-    logits = M.gen(outs)
-    targets = targets[:,1:].contiguous()
-    if args.gentargs:
-      gentexts,gentargs = genmax(logits,DS.itos_targets,targets=targets)
-      with open(args.savestr+"targets.txt",'w') as f:
-        f.write("\n".join(gentargs))
-      args.gentargs=False
-    gentexts,_ = genmax(logits,DS.itos_targets)
-    with open(args.savestr+args.epoch+".generated",'w') as f:
-      f.write("\n".join(gentexts))
-    if args.debug:
-      for x in gentexts:
-        print(x)
-    batchbleu = calcbleu(logits, targets, DS.stoi_targets["<end>"])
-    vbleu.append(batchbleu)
-    logits = logits[:,:targets.size(1),:].contiguous()
-    logits = logits.view(-1,logits.size(2))
-    if targets.size(1)>args.maxlen:
-      targets = targets[:,:args.maxlen].contiguous()
-    targets = targets.view(-1)
-    loss = criterion(logits, targets)
-    vloss.append(loss.data.cpu()[0])
-  M.train()
-  return sum(vloss)/len(vloss), sum(vbleu)/len(vbleu)
-
-
-def calcbleu(generated, targets, end):
-  #calcbleu(generated, targets, DS.stoi_targets["<end>"]):
-  cc = SmoothingFunction()
-  generated = torch.max(generated.data.cpu(),2)[1]
-  targets = targets.data.cpu()
-  bleu = 0
-  for i in range(generated.size(0)):
-    gen = list(generated[i])
-    targ = list(targets[i])
-    genend = gen.index(end) if end in gen else len(gen)
-    targend = targ.index(end) if end in targ else len(targ)
-    gen = gen[:genend]
-    targ = targ[:targend]
-    bleu += sentence_bleu([targ],gen,smoothing_function=cc.method3)
-  return bleu/i
-
-
-def init_vocab(M,DS,args):
-  #get a vsz x dim matrix to give to the model
-  with open(args.eventvocab) as f:
-    vocab = f.read().strip().lower().split("\n")
-  matrix = DS.matrix(vocab).cuda()
-  M.mkevents(matrix)
-
 
 def main():
   args = parseParams()

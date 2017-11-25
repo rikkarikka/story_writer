@@ -14,7 +14,8 @@ with open("vocabulary.txt") as f:
     else:
       wordassoc[l].append(ctr)
 
-for fn in ['train.txt.phrases','valid.txt.phrases']:
+lens = []
+for fn in ['train.txt.ner.phrases']:#,'valid.txt.phrases']:
   new = open(fn+".pretrain",'w')
   with open(fn) as f:
     for l in f:
@@ -24,7 +25,10 @@ for fn in ['train.txt.phrases','valid.txt.phrases']:
       for w in txt:
         tmp.extend([cats[i] for i in wordassoc[w]])
       if tmp:
+        #tmp = list(set(tmp))
+        lens.append(len(set(tmp)))
         txt = ' '.join(tmp)
         new.write(title+'\t'+txt+'\n')
   new.close()
+print(sum(lens)/len(lens))
 
