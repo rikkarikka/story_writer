@@ -34,6 +34,22 @@ class load_data:
   def matrix(self,li):
     return torch.stack([self.vecs.get(x) for x in li])
 
+  def pad_batch(self,batch,targ=True):
+    srcs,tgts = batch
+    targs = tgts
+    tensor = torch.cuda.LongTensor(len(srcs),max([len(x) for x in srcs])).zero_()
+    mask = torch.cuda.ByteTensor(tensor.size(0),tensor.size(1)).fill_(1)
+    for i,s in enumerate(srcs):
+      for j, w in enumerate(s):
+        mask[i,j]=0
+        tensor[i,j] = self.stoi[w] if w in self.stoi else 2
+    if targ:
+      targtmp = [[self.vocab.index(w) if w in self.vocab else 2 for w in x]+[1] for x in tgts]
+      m = max([len(x) for x in targtmp])
+      targtmp = [x+([0]*(m-len(x))) for x in targtmp]
+      targs = torch.cuda.LongTensor(targtmp)
+    return (tensor,targs,mask)
+
   def mkbatches(self,bsz):
     self.bsz = bsz
     self.train_batches = self.batches(self.train)

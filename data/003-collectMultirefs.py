@@ -19,6 +19,9 @@ trainf = open("train.txt.ner",'w')
 skipidx = [i for i,x in enumerate(titles) if x in valid or x in test]
 trainf.write("\n".join([x+'\t'+stories[i] for i,x in enumerate(titles) if i not in skipidx]))
 trainf.close()
+trainidx = open("train.idxs",'w')
+trainidx.write('\n'.join([str(i) for i in range(len(titles)) if i not in skipidx]))
+trainidx.close()
 
 validf = open("valid.txt.ner",'w')
 for v in valid:

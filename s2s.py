@@ -79,7 +79,7 @@ def validate(M,DS,args):
   hyps = []
   for x in data:
     sources, targets,mask = DS.vec_batch(x,targ=False)
-    sources = Variable(sources.cuda(),+1)
+    sources = Variable(sources.cuda(),volatile=True)
     M.zero_grad()
     logits = M(sources,mask,None)
     #outs = M(sources,None)
