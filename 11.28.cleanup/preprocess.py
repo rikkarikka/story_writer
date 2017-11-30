@@ -1,12 +1,11 @@
 import sys
 import torch
-import torchtext
 from collections import Counter
 from arguments import s2s as parseParams
 
 class load_data:
-  def __init__(self,args,train="data/train.txt.ner",valid="data/valid.txt.ner"):
-    train_sources,train_targets = self.ds(train)
+  def __init__(self,args):
+    train_sources,train_targets = self.ds(args.train)
     train_targets = [x[0] for x in train_targets]
     ctr = Counter([x for z in train_targets for x in z])
     thresh = 3
@@ -19,7 +18,7 @@ class load_data:
     self.svsz = len(self.itos)
     self.train = list(zip(train_sources,train_targets))
     self.train.sort(key=lambda x: len(x[0]),reverse=True)
-    val_sources, val_targets = self.ds(valid)
+    val_sources, val_targets = self.ds(args.valid)
     self.val = list(zip(val_sources,val_targets))
     self.val.sort(key=lambda x:len(x[0]),reverse=True)
     self.mkbatches(args.bsz)

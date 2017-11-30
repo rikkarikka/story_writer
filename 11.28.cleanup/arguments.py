@@ -13,6 +13,9 @@ def general():
   parser.add_argument('-epochs', type=int, default=30, help='number of epochs for train [default: 100]') #
   parser.add_argument('-debug', action="store_true")
   parser.add_argument('-resume', type=str, default=None)
+  parser.add_argument('-train',type=str,default="data/train.txt.ner.9ref")
+  parser.add_argument('-valid',type=str,default="data/valid.txt.ner.9ref")
+  parser.add_argument('-datafile', type=str, default="data/9ref.pt")
   return parser
 
 def mkdir(args):
@@ -23,15 +26,20 @@ def mkdir(args):
 
 def s2s():
   parser = general()
-  parser.add_argument('-datafile', type=str, default="data/multiref.pt")
-  parser.add_argument('-savestr',type=str,default="saved_models/s2s/")
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2s/")
+  args = parser.parse_args()
+  mkdir(args)
+  return args
+
+def noattn_s2s():
+  parser = general()
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_noattn_s2s/")
   args = parser.parse_args()
   mkdir(args)
   return args
 
 def sxs():
   parser = general()
-  parser.add_argument('-datafile', type=str, default="data/multiref.pt")
   parser.add_argument('-savestr',type=str,default="saved_models/sxs/")
   args = parser.parse_args()
   mkdir(args)
