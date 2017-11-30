@@ -140,10 +140,18 @@ def main():
 
   args.vsz = DS.vsz
   args.svsz = DS.svsz
-  M = model(args).cuda()
+  if args.resume:
+    M,optimizer = torch.load(args.resume)
+    M.enc.flatten_parameters()
+    M.dec.flatten_parameters()
+    e = args.resume.split("/")[-1] if "/" in args.resume else args.resume
+    e = e.split('_')[0]
+    e = int(e)+1
+  else:
+    optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
+    M = model(args).cuda()
   print(M)
-  optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
-  for epoch in range(args.epochs):
+  for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(M,DS,args,optimizer)
     print("train loss epoch",epoch,trainloss)

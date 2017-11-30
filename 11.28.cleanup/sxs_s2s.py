@@ -115,15 +115,12 @@ def validate(M,DS,args):
   with open(args.savestr+"hyps"+args.epoch,'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
-  try:
-    os.stat(args.savestr+"refs")
-  except:
-    with open(args.savestr+"refs",'w') as f:
-      refstr = []
-      for r in refs:
-        r = [' '.join(x) for x in r]
-        refstr.append('\n'.join(r))
-      f.write('\n'.join(refstr))
+  with open(args.savestr+"refs",'w') as f:
+    refstr = []
+    for r in refs:
+      r = [' '.join(x) for x in r]
+      refstr.append('\n'.join(r))
+    f.write('\n'.join(refstr))
   return bleu
 
 def train(M,DS,args,optimizer):
@@ -159,12 +156,21 @@ def main():
 
   args.vsz = DS.vsz
   args.svsz = DS.svsz
-  M = model(args).cuda()
+  if args.resume:
+    M,optimizer = torch.load(args.resume)
+    M.enc.flatten_parameters()
+    M.dec.flatten_parameters()
+    M.inter.flatten_parameters()
+    e = args.resume.split("/")[-1] if "/" in args.resume else args.resume
+    e = e.split('_')[0]
+    e = int(e)+1
+  else:
+    optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
+    M = model(args).cuda()
   M.endtok = DS.stoi["."]
   print(M)
   print('end tok idx: ',M.endtok)
-  optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
-  for epoch in range(args.epochs):
+  for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(M,DS,args,optimizer)
     print("train loss epoch",epoch,trainloss)

@@ -58,15 +58,10 @@ class load_data:
       targtmp = [x+([0]*(m-len(x))) for x in targtmp]
       targs = torch.cuda.LongTensor(targtmp)
       if align:
-        vmatrix = torch.cuda.FloatTensor(len(tgts),m,len(self.vcats)).zero_()
-        for b in range(len(valign)):
-          for i in range(len(valign[b])):
-            #if valign[b][i] == 0:
-            #  vmatrix[b,i,:].fill_(1/len(self.vcats))
-            #else:
-            if valign[b][i]>0:
-              vmatrix[b,i,valign[b][i]-1]=1
-              
+        vmatrix = torch.cuda.LongTensor(len(tgts),m).zero_()
+        for i,b in enumerate(valign):
+          for j,v in enumerate(b):
+            vmatrix[i,j]=v
     return (tensor,targs,vmatrix)
 
   def mkbatches(self,bsz):

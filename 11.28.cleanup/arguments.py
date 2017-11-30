@@ -42,7 +42,7 @@ def cat_s2s():
   parser.add_argument('-savestr',type=str,default="saved_models/cat_s2s/")
   parser.add_argument('-datafile',type=str,default="data/cat_data.pt")
   parser.add_argument('-catemb',type=int,default=500)
-  parser.add_argument('-lossratio',type=float,default=0.5)
+  parser.add_argument('-lossratio',type=float,default=0.25)
   args = parser.parse_args()
   mkdir(args)
   return args

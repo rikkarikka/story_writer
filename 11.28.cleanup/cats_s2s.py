@@ -24,14 +24,14 @@ class model(nn.Module):
     # attention stuff
     self.linin = nn.Linear(args.hsz,args.hsz,bias=False)
     self.sm = nn.Softmax()
-    self.linout = nn.Linear(args.hsz*3,args.hsz,bias=False)
+    self.linout = nn.Linear(args.hsz*2+args.catemb,args.hsz,bias=False)
     self.tanh = nn.Tanh()
     self.drop = nn.Dropout(args.drop)
 
     self.catemb = nn.Embedding(args.catsz,args.catemb)
     self.catvec = torch.cuda.LongTensor(range(args.catsz))
     self.encstepdown = nn.Linear(args.hsz*2,args.hsz,bias=False)
-    self.encdecmix = nn.Linear(args.hsz*2,args.hsz,bias=False)
+    self.encdecmix = nn.Linear(args.hsz*2,args.catemb,bias=False)
 
   def forward(self,inp,catvec,out=None):
     encenc = self.encemb(inp)
@@ -135,31 +135,25 @@ def train(M,DS,args,optimizer):
   weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
   weights[0] = 0
   criterion = nn.CrossEntropyLoss(weights)
-  attnloss = nn.MSELoss(size_average=False)
+  aweights = torch.cuda.FloatTensor(args.catsz).fill_(1)
+  aweights[0] = 0
+  attnloss = nn.CrossEntropyLoss(aweights)
   trainloss = []
   for x in data:
-    sources, targets, vmatrix = DS.pad_batch(x,align=True)
+    sources, targets, valign= DS.pad_batch(x,align=True)
     bsz = sources.size(0)
     sources = Variable(sources.cuda())
     targets = Variable(targets.cuda())
     catvec = Variable(M.catvec.repeat(bsz,1))
-    attntgts = Variable(vmatrix.cuda())
     M.zero_grad()
     logits,attns = M(sources,catvec,targets)
-    lossscale = 0
-    for b in range(attntgts.size(0)):
-      for i in range(attntgts.size(1)):
-        if attntgts[b,i,:].data.sum()==0:
-          attns.data[b,i,:].zero_()
-        else:
-          lossscale+=1
+    valign = Variable(valign.view(-1))
+    attns = attns.view(-1,attns.size(2))
     logits = logits.view(-1,logits.size(2))
     targets = targets.view(-1)
-    attns = attns.view(-1,attns.size(2))
-    attntgts = attntgts.view(-1,attntgts.size(2))
 
     loss1 = criterion(logits, targets)
-    loss2 = attnloss(attns, attntgts).div(lossscale)
+    loss2 = attnloss(attns,valign)
     loss = (args.lossratio*loss1) + ((1-args.lossratio)*loss2)
     loss.backward()
     trainloss.append(loss.data.cpu()[0])
@@ -179,7 +173,7 @@ def main():
 
   args.vsz = DS.vsz
   args.svsz = DS.svsz
-  args.catsz = len(DS.vcats)
+  args.catsz = len(DS.vcats)+1
   M = model(args).cuda()
   print(M)
   optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
