@@ -40,7 +40,7 @@ def noattn_s2s():
 
 def sxs():
   parser = general()
-  parser.add_argument('-savestr',type=str,default="saved_models/sxs/")
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_sxs/")
   args = parser.parse_args()
   mkdir(args)
   return args

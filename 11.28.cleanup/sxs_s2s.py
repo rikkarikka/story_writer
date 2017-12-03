@@ -165,8 +165,9 @@ def main():
     e = e.split('_')[0]
     e = int(e)+1
   else:
-    optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
     M = model(args).cuda()
+    optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
+    e = 0
   M.endtok = DS.stoi["."]
   print(M)
   print('end tok idx: ',M.endtok)
