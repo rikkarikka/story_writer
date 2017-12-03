@@ -6,6 +6,8 @@ with open("stories.all.ner") as f:
     stories = f.read().strip().split('\n')
 with open("titles.all.ner") as f:
     titles = f.read().strip().split('\n')
+with open("nv.all") as f:
+    nv = f.read().strip().split('\n')
 
 c = Counter(titles)
 opts = [x for x in c if c[x]>8]
