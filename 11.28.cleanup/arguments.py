@@ -44,6 +44,26 @@ def s2s1():
   mkdir(args)
   return args
 
+def s2s2nb():
+  parser = general()
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2s2nb/")
+  args = parser.parse_args()
+  args.train = "../data/10refs/t_seq2_nobe.txt"
+  args.valid = "../data/10refs/v_seq2_nobe.txt"
+  args.datafile = "data/9ref_seq2_nobe.pt"
+  mkdir(args)
+  return args
+
+def s2s1nb():
+  parser = general()
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2s1nb/")
+  args = parser.parse_args()
+  args.train = "../data/10refs/t_seq1_nobe.txt"
+  args.valid = "../data/10refs/v_seq1_nobe.txt"
+  args.datafile = "data/9ref_seq1_nobe.pt"
+  mkdir(args)
+  return args
+
 def s2s():
   parser = general()
   parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2s/")
