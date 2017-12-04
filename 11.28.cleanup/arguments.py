@@ -72,6 +72,7 @@ def s2s2catsrare():
   args.datafile = "data/s2rarecats.pt"
   mkdir(args)
   return args
+
 def s2s1catsrare():
   parser = general()
   parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2catsrare/")

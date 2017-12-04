@@ -1,3 +1,6 @@
+*pycache*/*
+*/*pycache*/*
+*.swp
 saved_models/*
 11.28.cleanup/saved_models/*
 *.pt

@@ -15,6 +15,7 @@ def validate(M,DS,savestr,data=None):
   for x in data:
     sources, targets = DS.pad_batch(x,targ=False)
     sources = Variable(sources.cuda(),volatile=True)
+    print(sources)
     M.zero_grad()
     logits = M(sources,None)
     logits = torch.max(logits.data.cpu(),2)[1]
@@ -72,7 +73,9 @@ if __name__=="__main__":
       data = DS.train_batches
       savestr = "train"
     else:
-      assert(False)
+      DS.new_data(sys.argv[3])
+      data = DS.new_batches
+      savestr = "new"
   except:
     savestr = "val"
     data = DS.val_batches

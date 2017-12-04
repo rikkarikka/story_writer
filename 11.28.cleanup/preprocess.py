@@ -23,6 +23,13 @@ class load_data:
     self.val.sort(key=lambda x:len(x[0]),reverse=True)
     self.mkbatches(args.bsz)
 
+  def new_data(self,src):
+    with open(src) as f:
+      new = [(x.strip().split(),self.val[i][1]) for i,x in enumerate(f.readlines())]
+    new.sort(key=lambda x:len(x[0]),reverse=True)
+    self.new_batches = self.batches(new)
+
+
   def pad_batch(self,batch,targ=True):
     srcs,tgts = batch
     targs = tgts
