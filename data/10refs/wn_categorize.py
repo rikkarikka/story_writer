@@ -54,7 +54,7 @@ def make_files():
   syns = [x.name() for x in syns]
   syns = set(syns)
   syns = [wn.synset(x) for x in syns]
-  print(len(syns))
+  print('total syns: ',len(syns))
   #divide into ~500 groups
   maxgroup = 50
   mingroup = 30
@@ -144,6 +144,7 @@ def make_wordd():
   return wordassoc
 
 def make_data():
+  wnl = WNL()
   with open("t_train.idxs") as f:
     tidx = set([int(x) for x in f.read().strip().split('\n')])
   with open("t_val.idxs") as f:
@@ -173,10 +174,10 @@ def make_data():
           s = ndic[s]
         else:
           continue
-        print(n,s);exit()
       else:
-        if n in verbd:
-          s = verbd[n]
+        lem = wnl.lemmatize(n,pos='v')
+        if lem in verbd:
+          s = verbd[lem]
         else:
           continue
       newl.append(str(s))
