@@ -44,6 +44,26 @@ def s2s1():
   mkdir(args)
   return args
 
+def s2s2cats():
+  parser = general()
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_cats2s/")
+  args = parser.parse_args()
+  args.train = "../data/10refs/s2cats2.train"
+  args.valid = "../data/10refs/s2cats2.val"
+  args.datafile = "data/s2cats2.pt"
+  mkdir(args)
+  return args
+def s2s1cats():
+  parser = general()
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2cats/")
+  args = parser.parse_args()
+  args.train = "../data/10refs/s2cats1.train"
+  args.valid = "../data/10refs/s2cats1.val"
+  args.datafile = "data/s2cats1.pt"
+  mkdir(args)
+  return args
+
+
 def s2s2nb():
   parser = general()
   parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2s2nb/")

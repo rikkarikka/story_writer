@@ -149,6 +149,10 @@ def make_data():
     tidx = set([int(x) for x in f.read().strip().split('\n')])
   with open("t_val.idxs") as f:
     vidx = set([int(x) for x in f.read().strip().split('\n')])
+  with open("stories.all.ner") as f:
+    stories = f.read().strip().split('\n')
+  with open("titles.all.ner") as f:
+    titles = f.read().strip().split('\n')
 
   verbd = make_wordd()
 
@@ -158,6 +162,10 @@ def make_data():
   al = []
   outv = []
   alv = []
+  tites = []
+  vtites = []
+  stor = []
+  vstor = []
   for i,l in enumerate(nv):
     if i not in tidx and i not in vidx: continue
     l = l.strip().split()
@@ -185,9 +193,13 @@ def make_data():
     if i in tidx:
       out.append(" ".join(newl))
       al.append(" ".join(align))
+      tites.append(titles[i])
+      stor.append(stories[i])
     elif i in vidx:
       outv.append(" ".join(newl))
       alv.append(" ".join(align))
+      vtites.append(titles[i])
+      vstor.append(stories[i])
   with open("t_train.cats",'w') as f:
     f.write("\n".join(out))
   with open("t_train.align",'w') as f:
@@ -196,6 +208,14 @@ def make_data():
     f.write("\n".join(outv))
   with open("t_val.align",'w') as f:
     f.write("\n".join(alv))
+  with open('t_tite_train.txt','w') as f:
+    f.write('\n'.join(tites))
+  with open("t_stor_train.txt",'w') as f:
+    f.write('\n'.join(stor))
+  with open('t_tite_val.txt','w') as f:
+    f.write('\n'.join(vtites))
+  with open("t_stor_val.txt",'w') as f:
+    f.write('\n'.join(vstor))
 
 if __name__=="__main__":
   if len(sys.argv)>1:
