@@ -5,7 +5,7 @@ from s2s import model
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
 from preprocess import load_data
 
-def validate(M,DS,args,data=None):
+def validate(M,DS,savestr,data=None):
   if not data:
     data = DS.val_batches
   cc = SmoothingFunction()
@@ -25,20 +25,17 @@ def validate(M,DS,args,data=None):
     refs.extend(targets)
   bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
   M.train()
-  with open(args.savestr+"hyps"+args.epoch,'w') as f:
+  with open(savestr+"hyps",'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
-  try:
-    os.stat(args.savestr+"refs")
-  except:
-    with open(args.savestr+"refs",'w') as f:
-      refstr = []
-      for r in refs:
-        r = [' '.join(x) for x in r]
-        refstr.append('\n'.join(r))
-      f.write('\n'.join(refstr))
+  with open(savestr+"refs",'w') as f:
+    refstr = []
+    for r in refs:
+      r = [' '.join(x) for x in r]
+      refstr.append('\n'.join(r))
+    f.write('\n'.join(refstr))
   return bleu
-
+'''
 def validate(M,DS):
   data = DS.val_batches
   cc = SmoothingFunction()
@@ -66,8 +63,18 @@ def validate(M,DS):
       refstr.append('\n'.join(r))
     f.write('\n'.join(refstr))
   return bleu
-
+'''
 if __name__=="__main__":
   M,_ = torch.load(sys.argv[1] )
-  DS = torch.load("data/multiref.pt")
-  print(validate(M,DS))
+  DS = torch.load(sys.argv[2])
+  try:
+    if sys.argv[3]=='train':
+      data = DS.train_batches
+      savestr = "train"
+    else:
+      assert(False)
+  except:
+    savestr = "val"
+    data = DS.val_batches
+  savestr += "_" + ''.join([x for x in sys.argv[1] if x!='/'])
+  print(validate(M,DS,savestr,data))

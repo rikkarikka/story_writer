@@ -1,0 +1,500 @@
+220 250 220 220 57 220 57 220 57 220 57 220 57 person.n.01 <eos>
+220 12 89 220 36 13 220 220 <eos>
+220 23 23 23 23 23 23 23 23 220 artifact.n.01 <eos>
+220 214 time_period.n.01 220 23 magnitude.n.01 220 38 220 12 220 38 <eos>
+16 unfortunate.n.01 218 84 unfortunate.n.01 218 84 unfortunate.n.01 84 unfortunate.n.01 184 unfortunate.n.01 speech_act.n.01 220 12 94 <eos>
+relative.n.01 220 97 self-propelled_vehicle.n.01 74 23 193 23 23 artifact.n.01 193 <eos>
+220 214 time_period.n.01 higher_cognitive_process.n.01 region.n.01 artifact.n.01 220 higher_cognitive_process.n.01 89 23 motion.n.06 tract.n.01 220 23 89 higher_cognitive_process.n.01 110 container.n.01 container.n.01 higher_cognitive_process.n.01 74 89 23 time_period.n.01 <eos>
+220 12 8 collection.n.01 89 220 185 collection.n.01 220 12 77 68 collection.n.01 <eos>
+220 214 structure.n.01 relative.n.01 220 214 artifact.n.01 214 artifact.n.01 relative.n.01 220 214 artifact.n.01 220 214 artifact.n.01 <eos>
+23 structure.n.01 artifact.n.01 23 group.n.01 184 23 23 group.n.01 23 group.n.01 23 group.n.01 23 <eos>
+16 23 23 23 23 23 23 nutriment.n.01 23 220 65 <eos>
+23 feeling.n.01 tract.n.01 tract.n.01 220 person.n.01 220 person.n.01 89 220 12 tract.n.01 person.n.01 220 12 <eos>
+220 74 209 unfortunate.n.01 23 unfortunate.n.01 74 220 unfortunate.n.01 <eos>
+220 female.n.02 6 23 person.n.01 23 organization.n.01 220 220 <eos>
+77 23 23 97 artifact.n.01 motion.n.06 220 diversion.n.01 220 97 220 <eos>
+181 16 220 220 23 structure.n.01 23 38 220 <eos>
+220 structure.n.01 220 89 happening.n.01 23 person.n.01 person.n.01 24 person.n.01 220 person.n.01 250 representation.n.02 220 220 person.n.01 representation.n.02 <eos>
+77 23 object.n.01 organization.n.01 23 object.n.01 214 166 game.n.01 220 12 84 object.n.01 23 23 small_indefinite_quantity.n.01 166 game.n.01 <eos>
+220 97 artifact.n.01 time_period.n.01 220 23 38 self-propelled_vehicle.n.01 38 physical_phenomenon.n.01 38 physical_phenomenon.n.01 self-propelled_vehicle.n.01 38 physical_phenomenon.n.01 38 substance.n.07 self-propelled_vehicle.n.01 220 38 <eos>
+179 time_period.n.01 220 23 117 179 time_period.n.01 84 220 15 room.n.01 220 220 <eos>
+220 214 ungulate.n.01 82 ungulate.n.01 ungulate.n.01 220 38 220 12 ungulate.n.01 220 12 ungulate.n.01 220 12 173 <eos>
+220 female.n.02 69 23 organization.n.01 23 person.n.01 23 11 time_period.n.01 <eos>
+person.n.01 166 structure.n.01 23 166 structure.n.01 game.n.01 220 166 220 12 23 <eos>
+16 8 work.n.01 77 8 collection.n.01 89 220 77 8 motion.n.06 <eos>
+16 relative.n.01 relative.n.01 220 12 relative.n.01 16 relative.n.01 220 12 84 relative.n.01 220 12 relative.n.01 <eos>
+23 organization.n.01 23 organization.n.01 relative.n.01 23 person.n.01 23 relative.n.01 relative.n.01 220 12 <eos>
+209 organization.n.01 218 84 226 89 1 <eos>
+16 diversion.n.01 time_period.n.01 77 23 room.n.01 185 diversion.n.01 185 diversion.n.01 82 diversion.n.01 6 visual_property.n.01 <eos>
+220 97 89 220 97 89 44 44 44 97 <eos>
+89 36 77 36 nutriment.n.01 36 food.n.02 dish.n.02 220 220 12 117 <eos>
+16 container.n.01 organization.n.01 220 12 77 12 36 128 organization.n.01 220 12 12 36 container.n.01 <eos>
+gathering.n.01 86 220 23 220 23 220 adult.n.01 15 structure.n.01 220 12 220 12 <eos>
+220 23 95 machine.n.01 198 garment.n.01 198 machine.n.01 23 machine.n.01 relative.n.01 266 quality.n.01 worker.n.01 23 95 machine.n.01 <eos>
+domestic_animal.n.01 220 220 16 23 animal.n.01 artifact.n.01 1 animal.n.01 8 animal.n.01 16 animal.n.01 <eos>
+220 time_period.n.01 15 220 relative.n.01 250 220 23 220 12 <eos>
+16 12 person.n.01 89 47 time_period.n.01 177 person.n.01 structure.n.01 47 220 47 physical_phenomenon.n.01 <eos>
+220 40 structure.n.01 artifact.n.01 220 40 23 38 artifact.n.01 220 23 <eos>
+220 99 nutriment.n.01 220 99 substance.n.07 relative.n.01 220 12 substance.n.07 relative.n.01 12 12 220 12 <eos>
+77 12 small_indefinite_quantity.n.01 6 36 commodity.n.01 12 small_indefinite_quantity.n.01 198 arthropod.n.01 container.n.01 214 object.n.01 220 12 arthropod.n.01 40 <eos>
+220 relative.n.01 1 machine.n.01 relative.n.01 220 220 23 happening.n.01 1 work.n.02 <eos>
+89 person.n.01 16 214 23 25 22 23 group_action.n.01 36 person.n.01 <eos>
+6 23 artifact.n.01 220 23 23 baked_goods.n.01 23 baked_goods.n.01 relative.n.01 1 baked_goods.n.01 89 <eos>
+6 166 game.n.01 166 166 organization.n.01 127 166 220 166 organization.n.01 127 166 220 166 game.n.01 127 <eos>
+16 185 person.n.01 220 contestant.n.01 relative.n.01 relative.n.01 relative.n.01 65 209 23 person.n.01 220 diversion.n.01 person.n.01 <eos>
+74 220 23 building.n.01 district.n.01 220 12 260 220 220 12 <eos>
+6 99 fluid.n.01 89 220 time_period.n.01 220 time_period.n.01 fluid.n.01 220 220 fluid.n.01 structure.n.01 220 fluid.n.01 structure.n.01 <eos>
+220 domestic_animal.n.01 38 89 220 38 23 structure.n.01 82 domestic_animal.n.01 38 artifact.n.01 220 12 38 domestic_animal.n.01 <eos>
+220 12 220 relative.n.01 220 12 220 12 12 relative.n.01 relative.n.01 23 220 12 <eos>
+23 domestic_animal.n.01 220 12 47 person.n.01 person.n.01 77 8 domestic_animal.n.01 220 12 person.n.01 220 12 <eos>
+220 218 instrumentality.n.03 84 instrumentality.n.03 89 220 1 220 12 <eos>
+6 concept.n.01 6 166 6 166 6 166 6 127 game.n.01 <eos>
+220 domestic_animal.n.01 220 adult.n.01 16 38 female.n.02 38 leader.n.01 220 <eos>
+209 health_professional.n.01 happening.n.01 23 23 health_professional.n.01 220 220 23 220 person.n.01 <eos>
+220 38 structure.n.01 40 artifact.n.01 23 23 relative.n.01 relative.n.01 89 44 tissue.n.01 220 23 89 23 relative.n.01 23 <eos>
+220 female.n.02 relative.n.01 220 12 23 unfortunate.n.01 74 organization.n.01 220 12 <eos>
+time_period.n.01 6 36 baked_goods.n.01 time_period.n.01 239 part.n.02 24 person.n.01 person.n.01 128 part.n.02 198 container.n.01 36 time_period.n.01 <eos>
+220 23 23 container.n.01 23 vessel.n.03 23 fluid.n.01 23 baked_goods.n.01 23 198 matter.n.03 <eos>
+16 166 game.n.01 177 person.n.01 166 game.n.01 person.n.01 time_period.n.01 23 person.n.01 <eos>
+6 higher_cognitive_process.n.01 84 artifact.n.01 84 1 84 artifact.n.01 1 <eos>
+220 192 drug_of_abuse.n.01 person.n.01 219 matter.n.03 220 15 50 vessel.n.03 219 <eos>
+220 18 person.n.01 16 18 220 23 drug_of_abuse.n.01 artifact.n.01 <eos>
+69 female.n.02 female.n.02 person.n.01 female.n.02 23 13 23 23 female.n.02 <eos>
+77 23 person.n.01 23 artifact.n.01 15 artifact.n.01 23 23 person.n.01 23 89 23 artifact.n.01 <eos>
+220 214 84 instrument.n.01 artifact.n.01 121 8 relative.n.01 relative.n.01 15 8 instrument.n.01 220 <eos>
+220 74 machine.n.01 25 166 220 23 machine.n.01 89 23 23 220 23 machine.n.01 <eos>
+220 21 structure.n.01 220 21 structure.n.01 220 21 structure.n.01 220 89 21 21 <eos>
+220 214 object.n.01 self-propelled_vehicle.n.01 25 38 220 23 44 23 quality.n.01 <eos>
+220 104 89 23 23 structure.n.01 104 structure.n.01 89 23 structure.n.01 104 <eos>
+220 12 relative.n.01 220 23 220 relative.n.01 220 23 220 12 relative.n.01 89 unfortunate.n.01 255 48 <eos>
+6 21 room.n.01 structure.n.01 220 36 36 198 room.n.01 36 room.n.01 36 room.n.01 36 baked_goods.n.01 <eos>
+220 38 communicator.n.01 220 36 220 127 220 127 220 127 <eos>
+89 activity.n.01 15 220 17 time_period.n.01 23 collection.n.01 activity.n.01 220 <eos>
+6 94 music.n.01 6 94 166 6 203 relative.n.01 15 166 <eos>
+23 23 23 ungulate.n.01 49 ungulate.n.01 220 diversion.n.01 23 23 23 ungulate.n.01 diversion.n.01 <eos>
+220 time_period.n.01 74 time_period.n.01 220 23 250 220 23 250 220 happening.n.01 23 <eos>
+220 53 room.n.01 relative.n.01 220 12 250 relative.n.01 220 23 23 room.n.01 23 work.n.01 220 12 <eos>
+220 contestant.n.01 organization.n.01 220 38 artifact.n.01 organization.n.01 38 person.n.01 whole.n.02 contestant.n.01 38 127 220 12 <eos>
+220 84 84 84 84 84 84 relative.n.01 artifact.n.01 84 32 <eos>
+89 structure.n.01 220 23 220 23 220 23 220 23 220 12 <eos>
+220 49 container.n.01 74 23 191 23 12 44 artifact.n.01 44 23 38 self-propelled_vehicle.n.01 220 140 <eos>
+209 structure.n.01 220 23 23 artifact.n.01 185 84 structure.n.01 transaction.n.01 structure.n.01 220 <eos>
+220 220 42 organization.n.01 wrongdoer.n.01 77 42 22 65 220 23 wrongdoer.n.01 36 person.n.01 <eos>
+220 220 12 23 220 12 220 12 220 12 23 220 12 220 <eos>
+89 furnishing.n.02 16 68 happening.n.01 198 furnishing.n.02 arthropod.n.01 23 arthropod.n.01 material.n.01 220 arthropod.n.01 furnishing.n.02 <eos>
+220 12 room.n.01 220 23 structure.n.01 artifact.n.01 1 room.n.01 89 tract.n.01 outgo.n.01 77 1 room.n.01 <eos>
+220 214 district.n.01 220 23 84 84 artifact.n.01 84 container.n.01 <eos>
+220 artifact.n.01 artifact.n.01 220 12 23 220 12 23 220 artifact.n.01 220 12 47 220 23 <eos>
+23 artifact.n.01 127 relative.n.01 15 24 16 23 250 16 127 220 12 <eos>
+220 23 205 71 80 relative.n.01 relative.n.01 8 document.n.01 127 71 80 relative.n.01 relative.n.01 220 12 205 <eos>
+1 higher_cognitive_process.n.01 23 organization.n.01 38 collection.n.01 220 38 38 23 <eos>
+1 instrumentality.n.03 15 artifact.n.01 220 12 instrumentality.n.03 175 instrumentality.n.03 220 <eos>
+23 mechanism.n.05 220 mechanism.n.05 220 23 23 mechanism.n.05 220 23 220 mechanism.n.05 220 <eos>
+220 contestant.n.01 contestant.n.01 220 23 220 127 contestant.n.01 12 23 contestant.n.01 220 12 contestant.n.01 220 contestant.n.01 organization.n.01 220 127 contestant.n.01 <eos>
+6 23 77 12 166 game.n.01 74 organization.n.01 220 220 89 166 <eos>
+39 95 container.n.01 time_period.n.01 220 95 container.n.01 220 95 container.n.01 220 95 container.n.01 <eos>
+16 21 representation.n.02 23 artifact.n.01 1 artifact.n.01 21 representation.n.02 21 representation.n.02 <eos>
+89 220 15 220 6 220 23 220 23 220 23 220 12 23 220 12 <eos>
+220 relative.n.01 220 relative.n.01 relative.n.01 220 relative.n.01 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 220 relative.n.01 relative.n.01 220 relative.n.01 relative.n.01 <eos>
+89 220 264 220 97 self-propelled_vehicle.n.01 self-propelled_vehicle.n.01 121 185 97 77 209 185 <eos>
+relative.n.01 250 220 220 12 220 12 12 36 relative.n.01 220 12 <eos>
+220 23 220 23 220 23 220 12 47 220 23 220 12 <eos>
+16 1 self-propelled_vehicle.n.01 relative.n.01 143 220 23 220 97 relative.n.01 23 220 12 relative.n.01 220 <eos>
+89 domestic_animal.n.01 16 23 relative.n.01 220 12 23 domestic_animal.n.01 <eos>
+commodity.n.01 185 commodity.n.01 36 65 220 220 23 185 commodity.n.01 84 commodity.n.01 artifact.n.01 1 <eos>
+89 74 220 12 23 74 220 220 12 220 12 <eos>
+220 36 implement.n.01 ingredient.n.03 220 220 36 ingredient.n.03 baked_goods.n.01 220 ingredient.n.03 220 36 ingredient.n.03 220 <eos>
+16 artifact.n.01 24 relative.n.01 15 artifact.n.01 relative.n.01 220 1 artifact.n.01 220 <eos>
+16 47 creation.n.02 89 220 17 creation.n.02 room.n.01 220 249 12 12 12 12 room.n.01 instrumentality.n.03 15 artifact.n.01 <eos>
+16 94 166 musical_instrument.n.01 203 organization.n.01 220 187 expert.n.01 diversion.n.01 time_period.n.01 220 expert.n.01 <eos>
+adult.n.01 23 adult.n.01 23 23 220 adult.n.01 <eos>
+gathering.n.01 6 17 214 166 game.n.01 220 47 89 47 vertebrate.n.01 38 <eos>
+220 organization.n.01 8 74 220 12 40 artifact.n.01 33 220 <eos>
+animal.n.01 220 23 220 235 container.n.01 animal.n.01 23 substance.n.07 220 12 animal.n.01 substance.n.07 <eos>
+23 animal.n.01 artifact.n.01 185 animal.n.01 220 1 animal.n.01 23 animal.n.01 artifact.n.01 175 <eos>
+89 220 time_period.n.01 220 time_period.n.01 220 220 12 220 time_period.n.01 214 artifact.n.01 82 adult.n.01 18 160 128 <eos>
+181 structure.n.01 220 23 artifact.n.01 artifact.n.01 220 23 artifact.n.01 structure.n.01 220 15 artifact.n.01 220 15 <eos>
+relative.n.01 23 state.n.02 relative.n.01 220 23 23 state.n.02 state.n.02 220 relative.n.01 220 23 23 state.n.02 abstraction.n.06 relative.n.01 23 214 state.n.02 <eos>
+209 53 structure.n.01 220 6 220 6 <eos>
+organization.n.01 220 23 89 235 container.n.01 23 artifact.n.01 23 23 23 23 23 89 <eos>
+220 12 23 artifact.n.01 23 structure.n.01 artifact.n.01 23 84 6 84 assets.n.01 175 175 <eos>
+220 77 15 tract.n.01 structure.n.01 tract.n.01 50 tract.n.01 25 264 <eos>
+89 220 220 220 220 12 220 220 12 220 12 220 12 <eos>
+6 dish.n.02 220 99 220 220 12 220 substance.n.07 <eos>
+220 12 person.n.01 220 relative.n.01 relative.n.01 220 relative.n.01 220 12 relative.n.01 220 12 relative.n.01 220 12 relative.n.01 220 <eos>
+220 97 artifact.n.01 self-propelled_vehicle.n.01 15 artifact.n.01 self-propelled_vehicle.n.01 38 220 23 220 38 self-propelled_vehicle.n.01 220 23 <eos>
+16 23 organization.n.01 16 23 organization.n.01 24 relative.n.01 8 artifact.n.01 6 matter.n.03 sport.n.01 16 23 organization.n.01 <eos>
+16 unfortunate.n.01 185 220 12 23 unfortunate.n.01 <eos>
+220 commodity.n.01 organization.n.01 16 95 cognition.n.01 24 relative.n.01 143 47 143 220 <eos>
+220 organization.n.01 89 220 177 organization.n.01 time_period.n.01 77 23 220 12 250 relative.n.01 220 <eos>
+structure.n.01 220 89 23 23 artifact.n.01 1 structure.n.01 38 structure.n.01 <eos>
+220 23 69 adult.n.01 female.n.02 106 220 12 220 23 <eos>
+1 document.n.01 55 127 time_period.n.01 12 127 89 127 dish.n.02 <eos>
+skilled_worker.n.01 89 220 skilled_worker.n.01 220 skilled_worker.n.01 220 skilled_worker.n.01 220 skilled_worker.n.01 220 skilled_worker.n.01 220 skilled_worker.n.01 220 skilled_worker.n.01 220 skilled_worker.n.01 220 skilled_worker.n.01 <eos>
+220 203 activity.n.01 collection.n.01 220 12 214 activity.n.01 collection.n.01 220 239 127 <eos>
+time_period.n.01 23 whole.n.02 40 220 89 diversion.n.01 23 23 220 <eos>
+77 16 12 99 23 reproductive_structure.n.01 84 reproductive_structure.n.01 50 tract.n.01 state.n.02 reproductive_structure.n.01 220 <eos>
+23 object.n.01 organization.n.01 220 object.n.01 organization.n.01 220 226 organization.n.01 220 diversion.n.01 movement.n.03 23 collection.n.01 <eos>
+220 1 structure.n.01 89 220 1 220 12 220 23 1 <eos>
+89 220 74 unfortunate.n.01 unfortunate.n.01 89 220 74 time_period.n.01 89 23 220 12 <eos>
+220 12 structure.n.01 220 12 furnishing.n.02 220 23 furnishing.n.02 89 89 68 furnishing.n.02 77 23 furnishing.n.02 53 furnishing.n.02 <eos>
+89 16 94 154 language.n.01 82 message.n.02 203 collection.n.01 94 94 language.n.01 220 person.n.01 94 94 diversion.n.01 person.n.01 <eos>
+16 74 organization.n.01 organization.n.01 organization.n.01 74 organization.n.01 organization.n.01 220 203 time_period.n.01 220 relative.n.01 organization.n.01 <eos>
+220 organization.n.01 220 166 person.n.01 25 166 220 person.n.01 12 <eos>
+220 220 23 motion.n.06 220 220 220 <eos>
+53 84 84 structure.n.01 84 220 89 53 <eos>
+220 166 game.n.01 game.n.01 organization.n.01 220 166 220 12 23 game.n.01 <eos>
+74 time_period.n.01 movement.n.03 220 220 12 220 23 74 220 12 220 12 <eos>
+belief.n.01 6 activity.n.01 organization.n.01 203 belief.n.01 24 person.n.01 message.n.02 person.n.01 128 message.n.02 person.n.01 <eos>
+6 matter.n.03 group.n.01 220 23 artifact.n.01 77 12 matter.n.03 group.n.01 151 artifact.n.01 220 happening.n.01 220 happening.n.01 <eos>
+220 97 relative.n.01 relative.n.01 220 97 220 97 220 97 220 220 97 220 <eos>
+220 32 structure.n.01 room.n.01 220 32 visual_property.n.01 16 visual_property.n.01 220 visual_property.n.01 32 visual_property.n.01 32 visual_property.n.01 <eos>
+27 small_indefinite_quantity.n.01 32 visual_property.n.01 small_indefinite_quantity.n.01 visual_property.n.01 143 220 143 220 23 149 23 149 23 small_indefinite_quantity.n.01 <eos>
+220 adult.n.01 220 220 12 220 220 220 <eos>
+220 220 220 220 organization.n.01 220 organization.n.01 220 organization.n.01 220 12 <eos>
+6 23 diversion.n.01 16 94 collection.n.01 77 8 collection.n.01 94 220 23 220 12 94 <eos>
+220 12 23 220 220 23 belief.n.01 game.n.01 220 220 84 belief.n.01 220 <eos>
+220 214 time_period.n.01 220 visual_property.n.01 15 visual_property.n.01 220 12 127 concept.n.01 document.n.01 220 <eos>
+domestic_animal.n.01 220 13 214 220 12 220 214 domestic_animal.n.01 <eos>
+219 220 vertebrate.n.01 artifact.n.01 220 12 vertebrate.n.01 vertebrate.n.01 220 12 vertebrate.n.01 99 <eos>
+6 89 nutriment.n.01 person.n.01 time_period.n.01 89 128 nutriment.n.01 person.n.01 220 12 89 person.n.01 <eos>
+220 220 220 220 220 220 220 220 63 structure.n.01 220 23 220 23 220 23 220 23 220 23 structure.n.01 220 <eos>
+179 time_period.n.01 65 77 23 95 38 74 23 220 220 23 <eos>
+220 23 person.n.01 relation.n.01 relative.n.01 220 23 220 23 person.n.01 220 relative.n.01 relative.n.01 220 <eos>
+220 53 84 relative.n.01 domestic_animal.n.01 relative.n.01 24 133 220 250 relative.n.01 220 23 animal.n.01 <eos>
+220 53 84 assets.n.01 218 84 furnishing.n.02 structure.n.01 23 218 furnishing.n.02 23 1 implement.n.01 <eos>
+domestic_animal.n.01 220 13 tract.n.01 13 domestic_animal.n.01 25 13 38 13 220 12 domestic_animal.n.01 220 38 <eos>
+220 12 structure.n.01 220 23 23 23 23 structure.n.01 220 12 23 23 220 12 23 23 <eos>
+89 structure.n.01 artifact.n.01 220 220 23 person.n.01 89 structure.n.01 220 12 220 15 person.n.01 220 <eos>
+220 female.n.02 220 99 container.n.01 container.n.01 23 23 substance.n.07 220 <eos>
+16 220 game.n.01 contestant.n.01 25 203 person.n.01 74 179 74 game.n.01 220 166 contestant.n.01 <eos>
+220 adult.n.01 220 220 23 structure.n.01 220 23 structure.n.01 220 23 structure.n.01 220 69 adult.n.01 23 structure.n.01 <eos>
+6 74 self-propelled_vehicle.n.01 74 structure.n.01 220 23 220 23 220 23 220 23 220 23 220 23 <eos>
+220 74 structure.n.01 artifact.n.01 220 fluid.n.01 220 23 220 12 220 23 fluid.n.01 structure.n.01 220 <eos>
+220 97 artifact.n.01 82 self-propelled_vehicle.n.01 artifact.n.01 220 38 self-propelled_vehicle.n.01 220 127 self-propelled_vehicle.n.01 220 12 <eos>
+89 220 74 220 time_period.n.01 220 89 220 74 time_period.n.01 77 25 8 motion.n.06 220 happening.n.01 <eos>
+23 artifact.n.01 1 small_indefinite_quantity.n.01 220 185 small_indefinite_quantity.n.01 220 small_indefinite_quantity.n.01 84 127 <eos>
+220 74 collection.n.01 74 219 89 99 99 99 74 23 <eos>
+220 science.n.01 89 content.n.05 content.n.05 77 74 content.n.05 220 239 127 <eos>
+220 12 38 tissue.n.01 40 23 artifact.n.01 23 89 8 health_professional.n.01 <eos>
+23 166 person.n.01 166 220 166 220 happening.n.01 166 220 <eos>
+220 166 musical_instrument.n.01 220 38 15 220 15 <eos>
+220 organization.n.01 84 84 artist.n.01 218 84 84 <eos>
+16 166 person.n.01 77 166 structure.n.01 127 food.n.02 6 127 food.n.02 6 89 happening.n.01 <eos>
+1 artifact.n.01 106 artifact.n.01 185 220 12 84 220 12 artifact.n.01 220 23 artifact.n.01 <eos>
+89 220 11 person.n.01 time_period.n.01 220 relative.n.01 relative.n.01 220 person.n.01 person.n.01 person.n.01 person.n.01 89 relative.n.01 female.n.02 relative.n.01 220 12 220 relative.n.01 220 person.n.01 <eos>
+220 activity.n.01 relative.n.01 220 214 artifact.n.01 214 relative.n.01 220 214 220 <eos>
+6 49 container.n.01 organization.n.01 container.n.01 220 6 47 220 23 container.n.01 220 6 218 84 container.n.01 218 84 container.n.01 <eos>
+work.n.02 information.n.01 220 15 220 23 23 23 23 23 23 23 23 <eos>
+relative.n.01 36 dish.n.02 nutriment.n.01 220 220 36 12 36 dish.n.02 relative.n.01 relative.n.01 12 food.n.02 220 12 relative.n.01 36 dish.n.02 <eos>
+89 220 94 tract.n.01 220 23 220 vertebrate.n.01 person.n.01 47 220 94 tract.n.01 220 12 94 tract.n.01 <eos>
+220 diversion.n.01 89 diversion.n.01 23 diversion.n.01 tract.n.01 23 diversion.n.01 89 tract.n.01 diversion.n.01 <eos>
+relative.n.01 36 50 32 artifact.n.01 relative.n.01 220 25 32 25 27 36 <eos>
+209 garment.n.01 84 collection.n.01 220 content.n.05 1 collection.n.01 collection.n.01 220 220 <eos>
+209 23 artifact.n.01 89 23 artifact.n.01 23 artifact.n.01 84 84 220 23 <eos>
+89 activity.n.01 15 185 activity.n.01 220 12 23 activity.n.01 220 12 <eos>
+47 220 23 77 23 47 expert.n.01 47 47 23 organ.n.01 person.n.01 250 220 <eos>
+220 23 11 time_period.n.01 220 social_event.n.01 220 time_period.n.01 220 220 220 220 <eos>
+220 12 game.n.01 organization.n.01 220 127 concept.n.01 220 game.n.01 220 127 concept.n.01 220 game.n.01 <eos>
+220 nutriment.n.01 220 23 99 220 12 substance.n.07 239 99 <eos>
+135 135 relative.n.01 220 23 23 23 23 23 relative.n.01 220 23 <eos>
+12 person.n.01 game.n.01 6 organization.n.01 12 23 organization.n.01 116 23 116 <eos>
+209 23 artifact.n.01 84 84 220 1 <eos>
+220 97 craft.n.02 25 23 47 craft.n.02 89 79 craft.n.02 220 12 47 craft.n.02 craft.n.02 <eos>
+220 motion.n.06 person.n.01 89 motion.n.06 220 motion.n.06 77 23 motion.n.06 220 motion.n.06 220 <eos>
+84 decoration.n.01 218 assets.n.01 198 198 decoration.n.01 226 person.n.01 <eos>
+74 skilled_worker.n.01 structure.n.01 220 skilled_worker.n.01 skilled_worker.n.01 skilled_worker.n.01 89 15 unfortunate.n.01 220 skilled_worker.n.01 89 12 skilled_worker.n.01 220 <eos>
+6 health_professional.n.01 220 89 220 65 77 95 cognition.n.01 23 person.n.01 person.n.01 128 science.n.01 209 220 <eos>
+94 sound.n.04 185 82 vertebrate.n.01 97 23 97 <eos>
+40 matter.n.03 40 matter.n.03 23 artifact.n.01 1 matter.n.03 40 artifact.n.01 40 40 matter.n.03 40 <eos>
+220 21 artifact.n.01 structure.n.01 220 198 artifact.n.01 220 198 artifact.n.01 220 23 <eos>
+16 communicator.n.01 220 person.n.01 instrument.n.01 220 person.n.01 220 person.n.01 communicator.n.01 <eos>
+220 97 220 44 23 artifact.n.01 skilled_worker.n.01 250 220 skilled_worker.n.01 250 skilled_worker.n.01 23 <eos>
+226 23 220 219 220 23 89 23 artifact.n.01 1 <eos>
+relative.n.01 220 game.n.01 166 220 17 game.n.01 relative.n.01 relative.n.01 220 17 game.n.01 relative.n.01 220 relative.n.01 166 <eos>
+220 tree.n.01 machine.n.01 220 12 12 12 12 220 12 220 12 220 12 220 12 220 12 <eos>
+16 8 artifact.n.01 artifact.n.01 16 47 concept.n.01 machine.n.01 77 23 artifact.n.01 185 machine.n.01 84 209 1 <eos>
+220 artifact.n.01 relative.n.01 220 12 65 220 reproductive_structure.n.01 nutriment.n.01 24 220 nutriment.n.01 250 220 reproductive_structure.n.01 23 artifact.n.01 1 reproductive_structure.n.01 220 99 nutriment.n.01 <eos>
+220 unfortunate.n.01 speech_act.n.01 23 speech_act.n.01 speech_act.n.01 23 unfortunate.n.01 23 speech_act.n.01 6 speech_act.n.01 <eos>
+220 97 artifact.n.01 220 12 magnitude.n.01 220 97 artifact.n.01 220 97 77 97 <eos>
+220 science.n.01 collection.n.01 220 activity.n.01 220 250 message.n.02 message.n.02 220 message.n.02 message.n.02 250 220 message.n.02 220 message.n.02 <eos>
+23 artifact.n.01 82 container.n.01 1 23 container.n.01 89 container.n.01 8 container.n.01 84 128 1 <eos>
+23 motion.n.06 220 23 23 220 12 23 <eos>
+220 expert.n.01 23 artifact.n.01 motion.n.06 89 203 time_period.n.01 time_period.n.01 23 12 47 220 12 47 concept.n.01 <eos>
+220 adult.n.01 220 12 23 unfortunate.n.01 220 23 unfortunate.n.01 220 12 220 <eos>
+23 group_action.n.01 relative.n.01 89 220 44 23 38 <eos>
+6 23 expressive_style.n.01 diversion.n.01 6 95 commodity.n.01 23 74 <eos>
+220 12 77 23 organization.n.01 person.n.01 89 15 15 organization.n.01 89 bodily_process.n.01 female.n.02 149 <eos>
+220 23 8 artifact.n.01 219 220 artifact.n.01 214 artifact.n.01 23 artifact.n.01 23 artifact.n.01 <eos>
+220 unwelcome_person.n.01 220 unwelcome_person.n.01 15 unwelcome_person.n.01 unwelcome_person.n.01 15 unwelcome_person.n.01 unwelcome_person.n.01 23 unwelcome_person.n.01 15 <eos>
+220 36 diversion.n.01 36 person.n.01 220 36 diversion.n.01 organization.n.01 220 36 diversion.n.01 36 person.n.01 220 <eos>
+220 243 36 dish.n.02 23 artifact.n.01 1 part.n.02 36 dish.n.02 8 happening.n.01 99 <eos>
+177 person.n.01 166 game.n.01 166 game.n.01 77 166 game.n.01 127 game.n.01 220 149 <eos>
+relative.n.01 44 vascular_plant.n.01 vascular_plant.n.01 220 12 vascular_plant.n.01 220 50 vascular_plant.n.01 material.n.01 vascular_plant.n.01 220 12 12 vascular_plant.n.01 material.n.01 vascular_plant.n.01 material.n.01 220 12 12 vascular_plant.n.01 material.n.01 <eos>
+220 166 game.n.01 game.n.01 organization.n.01 skilled_worker.n.01 part.n.03 220 game.n.01 organization.n.01 leader.n.01 250 220 leader.n.01 250 220 12 leader.n.01 250 220 leader.n.01 250 220 organization.n.01 communicator.n.01 <eos>
+220 artifact.n.01 organization.n.01 220 12 36 social_event.n.01 220 artifact.n.01 220 127 220 127 <eos>
+220 12 220 23 structure.n.01 220 23 220 12 220 <eos>
+220 214 plant_material.n.01 15 tool.n.01 33 25 12 44 structure.n.01 <eos>
+220 36 dish.n.02 ingredient.n.03 220 220 8 bodily_process.n.01 220 12 192 ingredient.n.03 <eos>
+220 12 17 emotion.n.01 creation.n.02 220 12 17 emotion.n.01 92 220 12 <eos>
+74 machine.n.01 organization.n.01 machine.n.01 36 tract.n.01 65 organization.n.01 166 machine.n.01 game.n.01 machine.n.01 <eos>
+220 166 game.n.01 person.n.01 person.n.01 220 game.n.01 220 person.n.01 220 127 person.n.01 89 process.n.06 127 person.n.01 <eos>
+89 99 drug_of_abuse.n.01 17 time_period.n.01 220 12 state.n.02 89 happening.n.01 89 happening.n.01 <eos>
+220 220 12 23 47 bodily_process.n.01 77 17 creation.n.02 17 84 6 <eos>
+23 organization.n.01 person.n.01 time_period.n.01 time_period.n.01 166 game.n.01 89 happening.n.01 166 game.n.01 23 person.n.01 instrumentality.n.03 220 12 23 organization.n.01 89 person.n.01 <eos>
+23 143 143 220 23 220 person.n.01 <eos>
+220 220 adult.n.01 220 220 220 220 6 220 220 6 220 <eos>
+220 12 220 23 220 220 23 220 12 <eos>
+domestic_animal.n.01 38 220 23 220 71 13 person.n.01 person.n.01 15 133 84 structure.n.01 <eos>
+220 97 artifact.n.01 220 physical_phenomenon.n.01 wrongdoer.n.01 97 motion.n.06 220 23 physical_phenomenon.n.01 220 12 47 220 <eos>
+220 time_period.n.01 25 23 furnishing.n.02 23 74 23 23 fluid.n.01 structure.n.01 fluid.n.01 220 79 structure.n.01 23 185 container.n.01 fluid.n.01 220 small_indefinite_quantity.n.01 99 <eos>
+220 vertebrate.n.01 220 94 220 23 structure.n.01 23 physical_phenomenon.n.01 220 23 physical_phenomenon.n.01 220 23 physical_phenomenon.n.01 structure.n.01 220 23 physical_phenomenon.n.01 structure.n.01 <eos>
+220 99 substance.n.07 23 building.n.01 employee.n.01 266 24 8 250 220 <eos>
+220 243 36 dish.n.02 23 artifact.n.01 1 part.n.02 36 dish.n.02 8 happening.n.01 99 <eos>
+1 collection.n.01 220 6 226 23 65 220 <eos>
+198 32 32 furnishing.n.02 happening.n.01 25 65 12 13 person.n.01 15 133 12 <eos>
+220 time_period.n.01 220 23 23 organ.n.01 220 140 89 23 23 <eos>
+220 atmospheric_phenomenon.n.01 220 12 atmospheric_phenomenon.n.01 220 220 77 23 atmospheric_phenomenon.n.01 38 tree.n.01 23 <eos>
+16 71 77 23 198 220 12 71 <eos>
+220 23 220 adult.n.01 23 127 room.n.01 12 12 preserver.n.03 220 127 23 representation.n.02 <eos>
+23 health_professional.n.01 220 8 work.n.01 relative.n.01 250 220 8 work.n.01 relative.n.01 8 time_period.n.01 220 12 250 relative.n.01 220 <eos>
+166 tract.n.01 game.n.01 220 220 220 166 25 36 220 166 220 person.n.01 <eos>
+220 166 game.n.01 machine.n.01 game.n.01 machine.n.01 15 6 166 game.n.01 220 12 machine.n.01 166 game.n.01 <eos>
+building.n.01 1 vascular_plant.n.01 220 50 vascular_plant.n.01 84 50 vascular_plant.n.01 8 time_period.n.01 <eos>
+16 47 psychological_state.n.01 person.n.01 16 94 173 container.n.01 activity.n.01 activity.n.01 activity.n.01 220 quality.n.01 quality.n.01 quality.n.01 quality.n.01 person.n.01 quality.n.01 <eos>
+16 94 musical_instrument.n.01 relative.n.01 220 musical_instrument.n.01 assets.n.01 23 structure.n.01 relative.n.01 143 220 128 musical_instrument.n.01 220 <eos>
+23 craft.n.02 motion.n.06 220 happening.n.01 23 25 23 220 12 <eos>
+female.n.02 219 female.n.02 42 female.n.02 female.n.02 female.n.02 female.n.02 220 female.n.02 220 female.n.02 220 female.n.02 23 <eos>
+220 177 organization.n.01 220 143 220 23 organization.n.01 self-propelled_vehicle.n.01 15 structure.n.01 50 <eos>
+89 220 220 65 77 23 act.n.02 179 220 65 symptom.n.01 13 person.n.01 <eos>
+23 sport.n.01 motion.n.06 53 127 220 sport.n.01 <eos>
+220 36 container.n.01 219 55 55 55 6 number.n.02 55 55 <eos>
+220 166 game.n.01 220 166 220 239 166 239 15 33 89 1 <eos>
+220 relative.n.01 220 89 feeling.n.01 organization.n.01 220 feeling.n.01 organization.n.01 220 feeling.n.01 organization.n.01 220 <eos>
+220 89 220 person.n.01 220 23 220 person.n.01 220 <eos>
+220 symptom.n.01 220 143 220 143 220 organ.n.01 person.n.01 143 220 <eos>
+6 structure.n.01 part.n.02 220 220 structure.n.01 220 structure.n.01 220 structure.n.01 220 220 79 79 structure.n.01 structure.n.01 structure.n.01 220 79 23 structure.n.01 <eos>
+39 person.n.01 66 220 23 220 person.n.01 220 person.n.01 220 12 <eos>
+diversion.n.01 220 220 220 220 220 220 220 12 group.n.01 <eos>
+relative.n.01 220 female.n.02 89 128 128 128 representation.n.02 creation.n.02 220 220 220 <eos>
+220 17 creation.n.02 collection.n.01 person.n.01 23 12 169 220 diversion.n.01 happening.n.01 creation.n.02 220 23 creation.n.02 building.n.01 <eos>
+220 adult.n.01 time_period.n.01 adult.n.01 220 12 94 adult.n.01 12 12 adult.n.01 adult.n.01 220 12 94 adult.n.01 <eos>
+220 36 fluid.n.01 time_period.n.01 220 23 fluid.n.01 structure.n.01 23 fluid.n.01 structure.n.01 23 fluid.n.01 structure.n.01 23 fluid.n.01 structure.n.01 23 fluid.n.01 structure.n.01 23 fluid.n.01 structure.n.01 23 fluid.n.01 structure.n.01 23 fluid.n.01 fluid.n.01 220 88 89 23 artifact.n.01 1 <eos>
+220 female.n.02 6 220 220 220 220 220 220 220 220 <eos>
+220 15 77 36 nutriment.n.01 23 artifact.n.01 1 part.n.02 36 baked_goods.n.01 220 happening.n.01 99 99 <eos>
+16 23 diversion.n.01 220 12 23 structure.n.01 artifact.n.01 220 12 47 220 220 12 12 <eos>
+16 12 self-propelled_vehicle.n.01 8 motion.n.06 district.n.01 220 12 220 12 12 12 23 motion.n.06 220 12 12 motion.n.06 220 12 motion.n.06 220 12 motion.n.06 <eos>
+74 building.n.01 220 220 220 12 220 220 12 220 220 unfortunate.n.01 <eos>
+tree.n.01 220 adult.n.01 89 tree.n.01 220 12 tree.n.01 tool.n.01 15 relative.n.01 84 tool.n.01 <eos>
+74 skilled_worker.n.01 structure.n.01 220 skilled_worker.n.01 skilled_worker.n.01 skilled_worker.n.01 89 15 unfortunate.n.01 220 skilled_worker.n.01 89 12 skilled_worker.n.01 220 <eos>
+220 23 social_event.n.01 89 220 112 time_period.n.01 89 220 112 time_period.n.01 122 <eos>
+220 99 building.n.01 77 99 substance.n.07 23 219 substance.n.07 220 122 99 <eos>
+220 12 45 plant_part.n.01 40 220 12 tool.n.01 220 12 89 23 person.n.01 person.n.01 250 89 plant_part.n.01 <eos>
+23 motion.n.06 happening.n.01 220 23 23 23 23 23 artifact.n.01 artifact.n.01 23 23 23 plant_material.n.01 small_indefinite_quantity.n.01 <eos>
+6 23 game.n.01 77 8 game.n.01 activity.n.01 23 game.n.01 activity.n.01 6 <eos>
+6 94 part.n.02 94 94 25 94 220 220 94 <eos>
+23 23 nutriment.n.01 person.n.01 12 23 nutriment.n.01 99 part.n.02 nutriment.n.01 23 person.n.01 <eos>
+organization.n.01 166 district.n.01 game.n.01 atmospheric_phenomenon.n.01 220 15 220 23 game.n.01 atmospheric_phenomenon.n.01 15 atmospheric_phenomenon.n.01 25 23 220 <eos>
+220 organization.n.01 220 garment.n.01 220 226 garment.n.01 relative.n.01 12 garment.n.01 <eos>
+16 23 relative.n.01 143 23 23 16 <eos>
+220 12 209 artifact.n.01 23 artifact.n.01 artifact.n.01 185 artifact.n.01 84 6 175 89 30 artifact.n.01 <eos>
+220 220 relative.n.01 game.n.01 220 220 166 game.n.01 121 166 relative.n.01 126 74 15 <eos>
+220 99 nutriment.n.01 person.n.01 23 person.n.01 person.n.01 250 220 time_period.n.01 220 12 89 36 dish.n.02 <eos>
+220 adult.n.01 220 89 23 unfortunate.n.01 36 23 unfortunate.n.01 <eos>
+220 23 structure.n.01 82 assets.n.01 16 23 220 12 220 12 <eos>
+6 23 game.n.01 artifact.n.01 166 game.n.01 198 game.n.01 220 diversion.n.01 166 game.n.01 <eos>
+gathering.n.01 86 area.n.01 220 12 220 23 220 gathering.n.01 220 12 220 220 <eos>
+baked_goods.n.01 12 baked_goods.n.01 220 baked_goods.n.01 220 baked_goods.n.01 99 baked_goods.n.01 220 23 baked_goods.n.01 <eos>
+220 12 84 person.n.01 220 23 structure.n.01 artifact.n.01 84 person.n.01 person.n.01 1 35 person.n.01 <eos>
+209 game.n.01 220 77 12 71 tract.n.01 artifact.n.01 77 220 1 game.n.01 <eos>
+220 74 artifact.n.01 82 female.n.02 artifact.n.01 24 female.n.02 250 220 female.n.02 female.n.02 160 <eos>
+16 74 employee.n.01 143 220 12 94 220 23 unfortunate.n.01 143 220 12 94 220 <eos>
+6 220 220 220 220 220 220 220 220 220 220 220 220 <eos>
+220 99 nutriment.n.01 person.n.01 220 99 23 nutriment.n.01 person.n.01 15 220 99 food.n.02 <eos>
+220 95 23 95 95 commodity.n.01 23 self-propelled_vehicle.n.01 95 95 commodity.n.01 23 95 95 commodity.n.01 23 <eos>
+74 leader.n.01 structure.n.01 57 leader.n.01 leader.n.01 250 220 116 <eos>
+89 relation.n.01 220 12 23 89 23 8 220 12 <eos>
+220 214 artifact.n.01 82 adult.n.01 wrongdoer.n.01 38 adult.n.01 24 220 220 220 12 220 12 <eos>
+220 99 building.n.01 220 220 12 substance.n.07 220 12 substance.n.07 220 skilled_worker.n.01 <eos>
+220 quality.n.01 23 23 motion.n.06 23 23 99 wrongdoer.n.01 23 <eos>
+220 94 work.n.02 82 arthropod.n.01 97 artifact.n.01 23 arthropod.n.01 220 12 arthropod.n.01 220 <eos>
+220 214 artifact.n.01 179 whole.n.02 140 part.n.03 220 34 symptom.n.01 <eos>
+23 artifact.n.01 23 82 82 ungulate.n.01 127 <eos>
+89 106 time_period.n.01 177 nutriment.n.01 15 structure.n.01 177 furnishing.n.02 177 128 77 177 person.n.01 organization.n.01 89 happening.n.01 <eos>
+6 40 tree.n.01 relative.n.01 1 220 tree.n.01 220 40 23 tree.n.01 220 12 23 tree.n.01 220 12 <eos>
+6 185 6 185 6 higher_cognitive_process.n.01 185 84 visual_property.n.01 220 12 84 <eos>
+220 12 166 relative.n.01 23 representation.n.02 23 artifact.n.01 1 representation.n.02 23 220 12 <eos>
+ungulate.n.01 38 structure.n.01 12 23 tract.n.01 ungulate.n.01 15 structure.n.01 ungulate.n.01 127 structure.n.01 ungulate.n.01 <eos>
+107 vascular_plant.n.01 tract.n.01 220 12 vascular_plant.n.01 15 vascular_plant.n.01 220 15 vascular_plant.n.01 15 vascular_plant.n.01 220 15 vascular_plant.n.01 <eos>
+220 23 nutriment.n.01 person.n.01 time_period.n.01 220 23 220 23 garment.n.01 220 226 garment.n.01 220 220 <eos>
+16 instrumentality.n.03 16 89 tissue.n.01 220 12 work.n.01 220 <eos>
+220 11 time_period.n.01 time_period.n.01 89 220 11 time_period.n.01 268 220 time_period.n.01 268 220 time_period.n.01 179 11 220 11 adult.n.01 <eos>
+220 12 12 12 12 12 12 127 game.n.01 168 contestant.n.01 8 representation.n.02 12 quality.n.01 89 23 representation.n.02 <eos>
+16 animal.n.01 23 animal.n.01 artifact.n.01 185 84 concept.n.01 1 220 12 220 <eos>
+16 1 relative.n.01 89 77 1 89 127 127 127 220 89 1 relative.n.01 <eos>
+220 214 artifact.n.01 220 214 82 vertebrate.n.01 38 220 12 38 <eos>
+220 12 220 23 structure.n.01 220 23 220 12 220 <eos>
+89 25 unfortunate.n.01 outgo.n.01 220 23 220 23 220 outgo.n.01 220 outgo.n.01 220 outgo.n.01 220 <eos>
+220 game.n.01 220 38 artifact.n.01 organization.n.01 15 artifact.n.01 organization.n.01 220 12 <eos>
+relative.n.01 12 person.n.01 15 166 relative.n.01 220 12 relative.n.01 23 person.n.01 time_period.n.01 relative.n.01 220 12 <eos>
+220 23 220 9 220 happening.n.01 23 preserver.n.03 220 220 <eos>
+relative.n.01 209 133 group.n.01 133 relative.n.01 self-propelled_vehicle.n.01 220 133 relative.n.01 220 <eos>
+gathering.n.01 23 23 220 23 220 23 220 23 220 220 <eos>
+220 12 220 adult.n.01 time_period.n.01 psychological_state.n.01 36 content.n.05 121 12 <eos>
+25 214 220 220 220 12 23 group.n.01 122 220 12 12 23 12 <eos>
+214 6 214 89 220 time_period.n.01 89 220 260 time_period.n.01 89 40 organ.n.01 89 44 <eos>
+220 12 220 23 structure.n.01 220 23 220 12 220 <eos>
+166 game.n.01 organization.n.01 220 127 220 organization.n.01 127 game.n.01 220 organization.n.01 127 game.n.01 <eos>
+1 employee.n.01 128 religious_person.n.01 person.n.01 220 employee.n.01 244 15 244 15 employee.n.01 35 assets.n.01 <eos>
+6 machine.n.01 68 tract.n.01 happening.n.01 36 machine.n.01 machine.n.01 15 23 tract.n.01 machine.n.01 89 193 <eos>
+220 74 artifact.n.01 220 220 220 69 artifact.n.01 189 artifact.n.01 220 220 12 220 23 <eos>
+220 time_period.n.01 89 16 166 organization.n.01 organization.n.01 220 time_period.n.01 220 time_period.n.01 23 organization.n.01 time_period.n.01 23 tract.n.01 25 atmospheric_phenomenon.n.01 <eos>
+220 12 23 abstraction.n.06 185 abstraction.n.06 84 assets.n.01 198 220 12 65 220 23 <eos>
+89 71 218 structure.n.01 84 artifact.n.01 218 84 84 room.n.01 <eos>
+220 adult.n.01 23 sport.n.01 collection.n.01 23 15 game.n.01 220 23 220 <eos>
+220 12 creation.n.02 89 220 24 169 77 185 23 person.n.01 <eos>
+220 female.n.02 female.n.02 16 6 23 person.n.01 23 23 220 12 <eos>
+220 220 18 room.n.01 23 220 18 220 18 <eos>
+1 220 12 23 instrumentality.n.03 220 instrumentality.n.03 220 instrumentality.n.03 220 <eos>
+16 166 whole.n.02 object.n.01 66 220 whole.n.02 25 166 whole.n.02 89 47 whole.n.02 <eos>
+220 12 structure.n.01 220 12 127 person.n.01 82 structure.n.01 220 12 77 23 <eos>
+89 220 12 220 relative.n.01 220 12 23 12 12 12 12 12 physical_condition.n.01 health_professional.n.01 128 12 12 12 <eos>
+16 23 work.n.01 220 work.n.01 220 work.n.01 work.n.01 220 work.n.01 220 work.n.01 <eos>
+220 artifact.n.01 185 artifact.n.01 220 220 185 220 220 1 <eos>
+16 220 performer.n.01 136 activity.n.01 musical_instrument.n.01 activity.n.01 auditory_communication.n.01 activity.n.01 179 <eos>
+220 12 23 person.n.01 220 23 23 person.n.01 23 person.n.01 23 220 12 23 <eos>
+220 23 11 220 23 social_event.n.01 relative.n.01 23 220 person.n.01 220 <eos>
+person.n.01 220 person.n.01 89 illness.n.01 time_period.n.01 179 illness.n.01 220 143 220 143 220 illness.n.01 12 <eos>
+adult.n.01 220 94 166 94 220 94 220 94 220 <eos>
+220 94 220 220 220 220 <eos>
+220 relation.n.01 23 person.n.01 220 122 23 person.n.01 23 person.n.01 250 220 15 <eos>
+220 23 symptom.n.01 8 garment.n.01 artifact.n.01 23 garment.n.01 198 garment.n.01 23 23 garment.n.01 198 garment.n.01 <eos>
+16 1 self-propelled_vehicle.n.01 84 220 12 220 12 220 12 220 122 1 <eos>
+220 female.n.02 female.n.02 15 female.n.02 15 female.n.02 female.n.02 15 female.n.02 female.n.02 female.n.02 15 38 female.n.02 female.n.02 female.n.02 38 192 female.n.02 82 female.n.02 220 15 female.n.02 female.n.02 220 female.n.02 female.n.02 220 female.n.02 female.n.02 220 female.n.02 female.n.02 220 female.n.02 <eos>
+16 17 creation.n.02 220 17 whole.n.02 84 structure.n.01 77 185 whole.n.02 visual_property.n.01 220 123 artifact.n.01 <eos>
+6 80 tract.n.01 39 15 produce.n.01 tract.n.01 produce.n.01 220 12 220 23 produce.n.01 <eos>
+220 112 collection.n.01 112 112 112 112 179 15 220 112 23 <eos>
+220 12 220 23 structure.n.01 220 23 220 12 220 <eos>
+209 artifact.n.01 structure.n.01 84 77 77 25 36 artifact.n.01 furnishing.n.02 220 220 89 artifact.n.01 <eos>
+220 185 organization.n.01 220 23 220 23 185 220 220 220 12 220 220 <eos>
+220 instrument.n.01 220 time_period.n.01 220 94 instrument.n.01 121 instrument.n.01 happening.n.01 179 instrument.n.01 40 instrument.n.01 <eos>
+220 instrument.n.01 89 instrument.n.01 6 23 23 23 23 structure.n.01 23 instrument.n.01 127 instrument.n.01 <eos>
+220 220 person.n.01 89 220 220 12 220 220 12 <eos>
+89 23 implement.n.01 20 220 23 13 person.n.01 250 89 140 <eos>
+8 relative.n.01 structure.n.01 artifact.n.01 220 12 82 relative.n.01 220 12 220 12 relative.n.01 8 220 220 12 relative.n.01 220 <eos>
+220 12 198 instrumentality.n.03 small_indefinite_quantity.n.01 220 organ.n.01 25 23 220 basic_cognitive_process.n.01 220 basic_cognitive_process.n.01 220 12 84 220 instrumentality.n.03 <eos>
+relative.n.01 89 1 tree.n.01 220 12 12 tree.n.01 time_period.n.01 198 container.n.01 220 185 tree.n.01 84 decoration.n.01 <eos>
+musical_instrument.n.01 220 25 220 time_period.n.01 activity.n.01 203 time_period.n.01 musical_instrument.n.01 220 <eos>
+220 89 relative.n.01 220 12 220 relative.n.01 220 23 artifact.n.01 82 relative.n.01 220 12 <eos>
+220 97 time_period.n.01 220 23 71 act.n.02 220 12 71 act.n.02 220 12 84 act.n.02 220 12 84 act.n.02 <eos>
+220 53 room.n.01 84 room.n.01 220 220 53 room.n.01 185 room.n.01 84 220 12 <eos>
+organization.n.01 69 tract.n.01 69 220 12 information.n.01 25 12 <eos>
+6 information.n.01 skilled_worker.n.01 89 220 skilled_worker.n.01 220 24 information.n.01 information.n.01 220 127 250 220 skilled_worker.n.01 <eos>
+74 time_period.n.01 220 12 13 abstraction.n.06 250 13 220 250 13 abstraction.n.06 250 13 abstraction.n.06 250 13 abstraction.n.06 250 13 abstraction.n.06 220 12 13 abstraction.n.06 organization.n.01 220 13 abstraction.n.06 <eos>
+relative.n.01 220 time_period.n.01 89 220 time_period.n.01 89 220 220 relative.n.01 220 220 12 220 time_period.n.01 time_period.n.01 220 relative.n.01 <eos>
+220 machine.n.01 89 machine.n.01 77 8 machine.n.01 structure.n.01 198 machine.n.01 198 machine.n.01 <eos>
+6 166 domestic_animal.n.01 127 domestic_animal.n.01 game.n.01 127 domestic_animal.n.01 12 domestic_animal.n.01 127 127 <eos>
+220 99 matter.n.03 group.n.01 matter.n.03 group.n.01 219 adult.n.01 artifact.n.01 matter.n.03 group.n.01 219 matter.n.03 group.n.01 219 matter.n.03 group.n.01 219 matter.n.03 group.n.01 219 <eos>
+220 atmospheric_phenomenon.n.01 220 220 23 atmospheric_phenomenon.n.01 220 220 23 atmospheric_phenomenon.n.01 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+16 214 74 220 214 220 12 220 12 220 12 220 12 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 12 organization.n.01 220 23 organization.n.01 220 23 organization.n.01 220 <eos>
+organization.n.01 220 97 structure.n.01 220 97 220 23 38 220 12 23 <eos>
+6 1 1 structure.n.01 39 220 12 128 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 12 77 12 220 12 220 12 220 12 <eos>
+89 16 94 36 77 8 activity.n.01 collection.n.01 220 23 <eos>
+12 furnishing.n.02 220 23 53 furnishing.n.02 23 furnishing.n.02 185 artifact.n.01 84 furnishing.n.02 artifact.n.01 175 fabric.n.01 23 <eos>
+220 12 23 220 220 12 94 44 12 44 <eos>
+209 artifact.n.01 artifact.n.01 23 artifact.n.01 23 84 artifact.n.01 175 artifact.n.01 <eos>
+220 12 193 motion.n.06 220 12 magnitude.n.01 220 motion.n.06 220 12 motion.n.06 220 12 motion.n.06 220 12 motion.n.06 220 12 motion.n.06 220 12 motion.n.06 220 12 motion.n.06 <eos>
+220 36 dish.n.02 220 12 organization.n.01 6 dish.n.02 25 36 dish.n.02 220 <eos>
+female.n.02 23 organization.n.01 23 organization.n.01 commodity.n.01 artifact.n.01 23 commodity.n.01 structure.n.01 185 commodity.n.01 social_event.n.01 220 185 23 garment.n.01 garment.n.01 structure.n.01 structure.n.01 89 95 garment.n.01 <eos>
+leader.n.01 220 12 74 220 12 leader.n.01 1 220 12 84 device.n.01 89 220 <eos>
+time_period.n.01 relative.n.01 163 organization.n.01 220 12 23 organization.n.01 220 organization.n.01 89 relative.n.01 time_period.n.01 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+39 nutriment.n.01 happening.n.01 99 nutriment.n.01 220 12 12 220 12 220 12 nutriment.n.01 <eos>
+220 garment.n.01 220 23 95 23 artifact.n.01 garment.n.01 220 <eos>
+220 game.n.01 contestant.n.01 220 game.n.01 organization.n.01 220 game.n.01 23 organization.n.01 74 organization.n.01 127 game.n.01 220 12 <eos>
+220 organization.n.01 23 collection.n.01 220 23 collection.n.01 18 furnishing.n.02 220 12 122 collection.n.01 <eos>
+220 1 220 concept.n.01 220 12 68 time_period.n.01 218 1 work.n.02 time_period.n.01 94 <eos>
+person.n.01 220 18 220 24 speech_act.n.01 220 12 250 220 116 <eos>
+220 214 domestic_animal.n.01 82 domestic_animal.n.01 89 physical_condition.n.01 domestic_animal.n.01 part.n.02 12 38 domestic_animal.n.01 part.n.02 domestic_animal.n.01 part.n.02 instrument.n.01 part.n.02 <eos>
+220 36 artifact.n.01 relative.n.01 219 220 12 36 artifact.n.01 220 artifact.n.01 220 artifact.n.01 220 artifact.n.01 220 artifact.n.01 <eos>
+220 object.n.01 220 214 82 object.n.01 object.n.01 82 220 50 object.n.01 77 23 object.n.01 <eos>
+220 12 99 food.n.02 220 person.n.01 220 food.n.02 food.n.02 220 12 220 food.n.02 food.n.02 220 12 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 166 game.n.01 structure.n.01 166 adult.n.01 25 23 25 38 38 adult.n.01 220 174 <eos>
+220 23 nutriment.n.01 person.n.01 65 220 23 23 room.n.01 23 person.n.01 23 person.n.01 220 12 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+13 65 instrumentality.n.03 220 23 13 organization.n.01 24 220 143 220 instrumentality.n.03 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 97 time_period.n.01 38 38 artifact.n.01 165 collection.n.01 <eos>
+220 6 group.n.01 group.n.01 66 220 220 12 65 220 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+13 65 instrumentality.n.03 220 23 13 organization.n.01 24 220 143 220 instrumentality.n.03 <eos>
+1 garment.n.01 6 18 18 furnishing.n.02 220 18 wrongdoer.n.01 220 12 82 18 self-propelled_vehicle.n.01 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 scientist.n.01 6 science.n.01 collection.n.01 220 time_period.n.01 220 23 collection.n.01 220 12 84 220 science.n.01 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 166 writer.n.01 89 94 writer.n.01 220 writer.n.01 structure.n.01 220 writer.n.01 structure.n.01 220 writer.n.01 structure.n.01 220 writer.n.01 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 12 89 23 artifact.n.01 185 work.n.02 84 work.n.02 1 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 adult.n.01 220 36 dish.n.02 220 12 220 220 12 <eos>
+89 220 12 23 220 23 220 23 220 23 220 23 illness.n.01 <eos>
+220 performer.n.01 220 performer.n.01 16 160 203 23 unfortunate.n.01 <eos>
+99 baked_goods.n.01 99 baked_goods.n.01 220 12 99 baked_goods.n.01 220 36 99 baked_goods.n.01 <eos>
+220 36 baked_goods.n.01 visual_property.n.01 89 part.n.02 220 77 baked_goods.n.01 228 220 12 <eos>
+220 game.n.01 contestant.n.01 127 tract.n.01 game.n.01 organization.n.01 36 organization.n.01 127 220 127 game.n.01 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+relative.n.01 89 220 time_period.n.01 220 250 220 relative.n.01 220 23 220 relative.n.01 relative.n.01 220 <eos>
+220 structure.n.01 artifact.n.01 82 baked_goods.n.01 16 1 baked_goods.n.01 220 1 baked_goods.n.01 1 baked_goods.n.01 220 <eos>
+220 254 diversion.n.01 220 185 container.n.01 84 diversion.n.01 220 12 220 12 <eos>
+16 94 writer.n.01 66 220 23 organization.n.01 23 structure.n.01 23 94 atmospheric_phenomenon.n.01 <eos>
+16 23 16 23 74 employee.n.01 organization.n.01 220 12 74 time_period.n.01 220 12 <eos>
+6 tissue.n.01 220 12 23 health_professional.n.01 person.n.01 250 220 220 <eos>
+16 36 organization.n.01 220 8 time_period.n.01 77 12 36 8 time_period.n.01 220 12 <eos>
+6 36 dish.n.02 1 part.n.02 36 220 dish.n.02 220 77 220 <eos>
+activity.n.01 leader.n.01 220 220 12 220 23 220 12 activity.n.01 220 12 <eos>
+220 220 220 12 23 220 220 23 <eos>
+220 99 person.n.01 220 220 220 12 99 nutriment.n.01 220 12 <eos>
+small_indefinite_quantity.n.01 220 23 220 23 artifact.n.01 1 vessel.n.03 <eos>
+220 12 district.n.01 person.n.01 220 12 creativity.n.01 person.n.01 77 74 220 expert.n.01 220 12 220 12 <eos>
+16 220 organization.n.01 220 organization.n.01 relative.n.01 143 220 23 organization.n.01 relative.n.01 77 220 <eos>
+adult.n.01 23 person.n.01 24 person.n.01 89 141 adult.n.01 143 person.n.01 89 220 <eos>
+220 198 fabric.n.01 fabric.n.01 room.n.01 12 fabric.n.01 fabric.n.01 36 220 fabric.n.01 36 36 fabric.n.01 fabric.n.01 220 fabric.n.01 fabric.n.01 <eos>
+220 unfortunate.n.01 209 53 23 unfortunate.n.01 state.n.02 209 30 1 209 unfortunate.n.01 220 184 state.n.02 30 tract.n.01 30 30 30 1 <eos>
+220 160 23 23 220 220 12 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 80 80 80 80 80 80 80 80 80 information.n.01 <eos>
+6 89 assets.n.01 219 220 99 assets.n.01 219 89 220 99 89 99 <eos>
+organization.n.01 77 36 1 abstraction.n.06 80 36 document.n.01 220 36 transaction.n.01 <eos>
+220 15 person.n.01 15 133 8 artifact.n.01 15 220 15 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+99 tract.n.01 produce.n.01 organization.n.01 220 time_period.n.01 220 89 99 77 12 36 ingredient.n.03 220 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 65 77 95 social_event.n.01 25 166 25 166 61 139 61 structure.n.04 61 61 creativity.n.01 <eos>
+6 food.n.02 1 artifact.n.01 99 220 concept.n.01 99 food.n.02 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+person.n.01 220 6 166 structure.n.01 23 12 166 structure.n.01 23 23 <eos>
+16 47 person.n.01 220 23 structure.n.01 artifact.n.01 84 6 1 decoration.n.01 decoration.n.01 84 6 <eos>
+23 11 person.n.01 23 happening.n.01 relative.n.01 200 220 23 11 time_period.n.01 23 11 time_period.n.01 <eos>
+220 collection.n.01 220 94 work.n.02 44 collection.n.01 12 collection.n.01 220 220 12 94 collection.n.01 220 <eos>
+6 23 unfortunate.n.01 74 220 126 unfortunate.n.01 74 unfortunate.n.01 74 unfortunate.n.01 74 unfortunate.n.01 unfortunate.n.01 220 184 220 unfortunate.n.01 220 6 <eos>
+220 12 117 time_period.n.01 220 time_period.n.01 117 179 time_period.n.01 179 220 time_period.n.01 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+166 person.n.01 structure.n.01 person.n.01 89 220 time_period.n.01 89 71 220 220 12 220 250 220 <eos>
+23 self-propelled_vehicle.n.01 220 self-propelled_vehicle.n.01 220 23 self-propelled_vehicle.n.01 structure.n.01 82 self-propelled_vehicle.n.01 23 220 23 self-propelled_vehicle.n.01 <eos>
+220 12 94 matter.n.03 group.n.01 self-propelled_vehicle.n.01 wrongdoer.n.01 23 adult.n.01 250 220 23 matter.n.03 group.n.01 adult.n.01 220 12 <eos>
+organization.n.01 220 12 220 group.n.01 220 66 220 diversion.n.01 220 23 organization.n.01 220 <eos>
+220 12 23 activity.n.01 220 23 220 23 220 12 220 12 <eos>
+220 craft.n.02 organization.n.01 220 motion.n.06 220 23 220 12 220 12 <eos>
+12 15 organization.n.01 220 69 organization.n.01 220 12 94 220 15 220 69 organization.n.01 <eos>
+89 220 12 220 220 23 physical_phenomenon.n.01 220 23 220 23 220 12 84 220 <eos>
+220 12 content.n.05 person.n.01 220 23 content.n.05 220 23 content.n.05 220 23 13 person.n.01 content.n.05 person.n.01 89 content.n.05 220 time_period.n.01 <eos>
+happening.n.01 220 12 relative.n.01 220 relative.n.01 220 220 23 25 organization.n.01 39 organization.n.01 relative.n.01 220 220 <eos>
+visual_property.n.01 39 basic_cognitive_process.n.01 23 health_professional.n.01 220 12 23 health_professional.n.01 220 <eos>
+77 36 nutriment.n.01 220 36 dish.n.02 198 220 12 73 <eos>

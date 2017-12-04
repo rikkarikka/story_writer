@@ -141,7 +141,7 @@ def make_wordd():
             wordassoc[l] = ctr
 
   print(len(wordassoc))
-  return wordassoc
+  return wordassoc,cats
 
 def make_data():
   wnl = WNL()
@@ -154,7 +154,7 @@ def make_data():
   with open("titles.all.ner") as f:
     titles = f.read().strip().split('\n')
 
-  verbd = make_wordd()
+  verbd,vcats = make_wordd()
 
   with open("noundic.pickle",'rb') as f:
     ndic = pickle.load(f)
@@ -186,6 +186,7 @@ def make_data():
         lem = wnl.lemmatize(n,pos='v')
         if lem in verbd:
           s = verbd[lem]
+          s = cats[s]
         else:
           continue
       newl.append(str(s))
