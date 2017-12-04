@@ -7,7 +7,7 @@ with open("titles.all.ner") as f:
   titles = f.read().strip().split('\n')
 with open('stories.all.ner') as f:
   stories = f.read().strip().split('\n')
-with open('../nv.all') as f:
+with open('nv.all') as f:
   nv = f.read().strip().split('\n')
 
 t1 = open("t_seq1.txt",'w')

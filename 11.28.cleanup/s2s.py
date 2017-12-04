@@ -130,8 +130,7 @@ def train(M,DS,args,optimizer):
     if len(trainloss)%100==99: print(trainloss[-1])
   return sum(trainloss)/len(trainloss)
 
-def main():
-  args = parseParams()
+def main(args):
   DS = torch.load(args.datafile)
   if args.debug:
     args.bsz=2
@@ -152,6 +151,8 @@ def main():
     optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
     e=0
   print(M)
+  print(args.datafile)
+  print(args.savestr)
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(M,DS,args,optimizer)
@@ -161,4 +162,5 @@ def main():
     torch.save((M,optimizer),args.savestr+args.epoch+"_bleu-"+str(b))
 
 if __name__=="__main__":
-  main()
+  args = parseParams()
+  main(args)
