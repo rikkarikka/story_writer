@@ -3,5 +3,6 @@
 *.swp
 saved_models/*
 11.28.cleanup/saved_models/*
+12.5.redux/saved_models/*
 *.pt
 .vector_cache/*

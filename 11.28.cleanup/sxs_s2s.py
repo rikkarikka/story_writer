@@ -9,6 +9,7 @@ from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
 from preprocess import load_data
 from arguments import sxs as parseParams
 
+
 class model(nn.Module):
   def __init__(self,args):
     super().__init__()
@@ -66,10 +67,11 @@ class model(nn.Module):
           prev = prev[1]
         else:
           prev = out[:,i-1].unsqueeze(1)
-        for i in range(inp.size(0)):
-          if prev[i].data.eq(self.endtok).sum()==1:
-            iout, (hinter[i], cinter[i]) = self.inter(interout[i],(hinter[i],cinter[i]))
-            interout[i] = iout
+        changeidx = prev.squeeze().eq(self.endtok).data.nonzero()
+        for i in changeidx:
+          i = i.cpu()[0]
+          iout, (hinter[i], cinter[i]) = self.inter(interout[i],(hinter[i],cinter[i]))
+          interout[i] = iout
 
           
         op = op.squeeze(1)
@@ -91,7 +93,6 @@ class model(nn.Module):
 
     outputs = torch.cat(outputs,1)
     return outputs
-
 
 def validate(M,DS,args):
   data = DS.val_batches
@@ -115,12 +116,15 @@ def validate(M,DS,args):
   with open(args.savestr+"hyps"+args.epoch,'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
-  with open(args.savestr+"refs",'w') as f:
-    refstr = []
-    for r in refs:
-      r = [' '.join(x) for x in r]
-      refstr.append('\n'.join(r))
-    f.write('\n'.join(refstr))
+  try:
+    os.stat(args.savestr+"refs")
+  except:
+    with open(args.savestr+"refs",'w') as f:
+      refstr = []
+      for r in refs:
+        r = [' '.join(x) for x in r]
+        refstr.append('\n'.join(r))
+      f.write('\n'.join(refstr))
   return bleu
 
 def train(M,DS,args,optimizer):
@@ -146,8 +150,7 @@ def train(M,DS,args,optimizer):
     if len(trainloss)%100==99: print(trainloss[-1])
   return sum(trainloss)/len(trainloss)
 
-def main():
-  args = parseParams()
+def main(args):
   DS = torch.load(args.datafile)
   if args.debug:
     args.bsz=2
@@ -160,17 +163,17 @@ def main():
     M,optimizer = torch.load(args.resume)
     M.enc.flatten_parameters()
     M.dec.flatten_parameters()
-    M.inter.flatten_parameters()
     e = args.resume.split("/")[-1] if "/" in args.resume else args.resume
     e = e.split('_')[0]
     e = int(e)+1
   else:
     M = model(args).cuda()
     optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
-    e = 0
-  M.endtok = DS.stoi["."]
+    e=0
   print(M)
-  print('end tok idx: ',M.endtok)
+  M.endtok = DS.vocab.index(".")
+  print(args.datafile)
+  print(args.savestr)
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(M,DS,args,optimizer)
@@ -180,4 +183,5 @@ def main():
     torch.save((M,optimizer),args.savestr+args.epoch+"_bleu-"+str(b))
 
 if __name__=="__main__":
-  main()
+  args = parseParams()
+  main(args)

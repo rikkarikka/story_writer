@@ -69,7 +69,7 @@ def s2s2catsrare():
   args = parser.parse_args()
   args.train = "../data/10refs/s2rarecats.train"
   args.valid = "../data/10refs/s2rarecats.val"
-  args.datafile = "data/s2rarecats.pt"
+  args.datafile = "data/rarecats2s.pt"
   mkdir(args)
   return args
 
@@ -79,7 +79,7 @@ def s2s1catsrare():
   args = parser.parse_args()
   args.train = "../data/10refs/s1rarecats.train"
   args.valid = "../data/10refs/s1rarecats.val"
-  args.datafile = "data/rarecats2s.pt"
+  args.datafile = "data/s2rarecats.pt"
   mkdir(args)
   return args
 
@@ -117,6 +117,14 @@ def noattn_s2s():
   mkdir(args)
   return args
 
+def sxs_selfattn():
+  parser = general()
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_sxs_selfattn/")
+  args = parser.parse_args()
+  args.datafile = "data/selfattn.pt"
+  print(args.datafile)
+  mkdir(args)
+  return args
 def sxs():
   parser = general()
   parser.add_argument('-savestr',type=str,default="saved_models/9ref_sxs/")

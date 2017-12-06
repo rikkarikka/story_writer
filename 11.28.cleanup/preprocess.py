@@ -23,9 +23,14 @@ class load_data:
     self.val.sort(key=lambda x:len(x[0]),reverse=True)
     self.mkbatches(args.bsz)
 
-  def new_data(self,src):
-    with open(src) as f:
-      new = [(x.strip().split(),self.val[i][1]) for i,x in enumerate(f.readlines())]
+  def new_data(self,src,targ=None):
+    if targ is None:
+      with open(src) as f:
+        src,tgt = self.ds(src)
+        new = list(zip(src,tgt))
+        print(new)
+    else:
+      new = zip(src,targ)
     new.sort(key=lambda x:len(x[0]),reverse=True)
     self.new_batches = self.batches(new)
 
@@ -34,6 +39,8 @@ class load_data:
     srcs,tgts = batch
     targs = tgts
     srcnums = [[self.stoi[w] if w in self.stoi else 2 for w in x]+[1] for x in srcs]
+    m = max([len(x) for x in srcnums])
+    srcnums = [x+([0]*(m-len(x))) for x in srcnums]
     tensor = torch.cuda.LongTensor(srcnums)
     if targ:
       targtmp = [[self.vocab.index(w) if w in self.vocab else 2 for w in x]+[1] for x in tgts]
