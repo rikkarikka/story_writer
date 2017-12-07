@@ -23,6 +23,15 @@ def mkdir(args):
   except:
     os.mkdir(args.savestr)
 
+def s2s_bland():
+  parser = general()
+  parser.add_argument('-datafile', type=str, default="data/9ref.pt")
+  parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2s_bland/")
+  parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
+  args = parser.parse_args()
+  mkdir(args)
+  return args
+
 def s2s():
   parser = general()
   parser.add_argument('-datafile', type=str, default="data/9ref_verbs.pt")
@@ -30,6 +39,7 @@ def s2s():
   parser.add_argument('-verbs',type=str,default="data/train.verbs")
   parser.add_argument('-vmaxlen', type=int, default=10, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-pretrainepochs', type=int, default=10, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
   args = parser.parse_args()
   mkdir(args)
   return args

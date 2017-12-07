@@ -56,7 +56,7 @@ class load_data:
     if v:
       srcs,tgts,verbs = batch
     else:
-      srcs,tgts = batch
+      srcs,tgts,_ = batch
     targs = tgts
     srcnums = [[self.stoi[w] if w in self.stoi else 2 for w in x]+[1] for x in srcs]
     m = max([len(x) for x in srcnums])
