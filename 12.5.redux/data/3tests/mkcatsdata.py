@@ -5,10 +5,10 @@ from nltk.corpus import wordnet as wn
 from nltk.stem import WordNetLemmatizer as WNL
 
 
-with open('train.idxs') as f:
+with open('train.all.idxs') as f:
   tidxs = set([int(x) for x in f.read().strip().split('\n')])
 
-with open("nv.all") as f:
+with open("nv.sents.all") as f:
   nv = f.read().strip().split("\n")
   nvtrain = [x for i,x in enumerate(nv) if i in tidxs]
 
@@ -144,7 +144,7 @@ def make_wordd():
 
 def make_data():
   wnl = WNL()
-  with open("train.idxs") as f:
+  with open("train.all.idxs") as f:
     tidx = set([int(x) for x in f.read().strip().split('\n')])
 
   verbd,vcats = make_wordd()
@@ -160,6 +160,7 @@ def make_data():
     align = []
     for w in l:
       n,pos = w.lower().split("_")
+      if n in toocommon: continue
       if pos[0]=='n':
         s = getbestsyn(n)
         if not s:
@@ -169,13 +170,15 @@ def make_data():
           s = ndic[s]
         else:
           continue
-      else:
+      elif pos[0]=='v':
         lem = wnl.lemmatize(n,pos='v')
         if lem in verbd:
           s = verbd[lem]
           s = vcats[s]
         else:
           continue
+      else:
+        continue
       newl.append(str(s))
       align.append(w)
     if i in tidx:

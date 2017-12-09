@@ -1,5 +1,13 @@
 import os
 import argparse
+from nltk.stem import WordNetLemmatizer as WNL
+wnl = WNL()
+with open("nouncount.raw") as f:
+  nouns = [x.split("\t")[0] for x in f.readlines()]
+print(len(nouns))
+nouns = [wnl.lemmatize(n,pos='n') for n in nouns]
+print(len(set(nouns)))
+exit()
 
 def parseParams():
   parser = argparse.ArgumentParser(description='none')

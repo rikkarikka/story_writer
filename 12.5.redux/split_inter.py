@@ -7,7 +7,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch.autograd import Variable
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
-from verb_preprocess import load_data
+from inter_preprocess_new import load_data
 from arguments import s2s_inter as parseParams
 import pickle
 
@@ -58,7 +58,10 @@ class inter(nn.Module):
 
     for i in range(outp): 
       if i == 0:
-        prev = Variable(torch.cuda.LongTensor(inp.size(0),1).fill_(3))
+        if args.cuda:
+          prev = Variable(torch.cuda.LongTensor(inp.size(0),1).fill_(3))
+        else:
+          prev = Variable(torch.LongTensor(inp.size(0),1).fill_(3))
       else:
         if verbs is None:
           prev = self.vgen(op).max(2)
@@ -105,7 +108,10 @@ class surface(nn.Module):
   def forward(self,vencoding,hc,mask,out=None):
     h,c = hc
     #decode text
-    op = Variable(torch.cuda.FloatTensor(vencoding.size(0),self.args.hsz).zero_())
+    if args.cuda:
+      op = Variable(torch.cuda.FloatTensor(vencoding.size(0),self.args.hsz).zero_())
+    else:
+      op = Variable(torch.FloatTensor(vencoding.size(0),self.args.hsz).zero_())
     outputs = []
     attns = []
 
@@ -116,7 +122,10 @@ class surface(nn.Module):
 
     for i in range(outp): 
       if i == 0:
-        prev = Variable(torch.cuda.LongTensor(vencoding.size(0),1).fill_(3))
+        if args.cuda:
+          prev = Variable(torch.cuda.LongTensor(vencoding.size(0),1).fill_(3))
+        else:
+          prev = Variable(torch.LongTensor(vencoding.size(0),1).fill_(3))
       else:
         if out is None:
           prev = self.gen(op).max(2)
@@ -155,8 +164,12 @@ class surface(nn.Module):
     c = [cx for _ in range(self.beamsize)]
 
 
-    ops = [Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()) for i in range(self.beamsize)]
-    prev = [Variable(torch.cuda.LongTensor(1,1).fill_(3)) for i in range(self.beamsize)]
+    if args.cuda:
+      ops = [Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()) for i in range(self.beamsize)]
+      prev = [Variable(torch.cuda.LongTensor(1,1).fill_(3)) for i in range(self.beamsize)]
+    else:
+      ops = [Variable(torch.FloatTensor(1,1,self.args.hsz).zero_()) for i in range(self.beamsize)]
+      prev = [Variable(torch.LongTensor(1,1).fill_(3)) for i in range(self.beamsize)]
     beam = [[] for x in range(self.beamsize)]
     scores = [0]*self.beamsize
     sents = [0]*self.beamsize
@@ -243,77 +256,16 @@ class surface(nn.Module):
     topscore =  donescores.index(max(donescores))
     return done[topscore], doneattns[topscore]
 
-def draw(inters,surface,attns,args):
-  for i in range(len(inters)):
-    try:
-      os.mkdir(args.savestr+"attns/")
-    except:
-      pass
-    with open(args.savestr+"attns/"+args.epoch+"-"+str(i),'wb') as f:
-      pickle.dump((inters[i],surface[i],attns[i].data.cpu().numpy()),f)
-  
-def validate(I,S,DS,args):
-  data = DS.val_batches
-  cc = SmoothingFunction()
-  I.eval()
-  S.eval()
-  refs = []
-  hyps = []
-  attns = []
-  inters = []
-  for x in data:
-    if args.debug:
-      sources, targets, _= DS.pad_batch(x,targ=False)
-    else:
-      sources, targets = DS.pad_batch(x,targ=False,v=False)
-    sources = Variable(sources,requires_grad=False)
-    logits = []
-    attn = []
-    for s in sources:
-      s = s.unsqueeze(0).contiguous()
-      predinter,(he,ce) = I.forward(s)
-      _, preds = torch.max(predinter,2)
-      plist = list(preds.data[0])
-      if 1 in plist[:-1]:
-        preds = preds[:,:plist.index(1)+1]
-      p,(hv,cv) = I.encode(preds.data,(he,ce))
-      h = hv; c = cv
-      l,a = S.beamsearch(p,(h,c))
-      logits.append(l)
-      attn.append(a)
-      ihyp = [[DS.verb_vocab[x] for x in list(y)] for y in preds.data]
-      inters.extend(ihyp)
-    attns.append(torch.cat(a,0))
-    hyp = [x[:x.index(1)] if 1 in x else x for x in logits]
-    hyp = [[DS.vocab[x] for x in y] for y in hyp]
-    hyps.extend(hyp)
-    refs.extend(targets)
-  draw(inters,hyps,attns,args)
-  bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
-  I.train()
-  S.train()
-  with open(args.savestr+"hyps"+args.epoch,'w') as f:
-    hyps = [' '.join(x) for x in hyps]
-    f.write('\n'.join(hyps))
-  try:
-    os.stat(args.savestr+"refs")
-  except:
-    with open(args.savestr+"refs",'w') as f:
-      refstr = []
-      for r in refs:
-        r = [' '.join(x) for x in r]
-        refstr.append('\n'.join(r))
-      f.write('\n'.join(refstr))
-  return bleu
-
 def train(I,S,DS,args,optimizer):
-  data = DS.train_batches
   weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
   weights[0] = 0
   criterion = nn.CrossEntropyLoss(weights)
   trainloss = []
-  for x in data:
-    sources, targets, verbs = DS.pad_batch(x)
+  while True:
+    x = DS.get_batch()
+    if not x:
+      break
+    sources,targets,verbs = x
     sources = Variable(sources)
     predinter,(he,ce) = I.forward(sources)
     _, preds = torch.max(predinter,2)
@@ -342,15 +294,16 @@ def train(I,S,DS,args,optimizer):
   return sum(trainloss)/len(trainloss)
 
 def pretrain(I,DS,args,optimizer):
-  data = DS.train_batches
   weights2 = torch.cuda.FloatTensor(args.verbvsz).fill_(1)
   weights2[0] = 0
   criterion2 = nn.CrossEntropyLoss(weights2)
   trainloss = []
-  for x in data:
-    sources, targets,verbs = DS.pad_batch(x)
+  while True:
+    x = DS.get_batch()
+    if not x:
+      break
+    sources,targets,verbs = x
     sources = Variable(sources)
-    targets = Variable(targets)
     verbs = Variable(verbs)
     I.zero_grad()
     vlogits,_ = I(sources,verbs=verbs)
@@ -383,34 +336,40 @@ def main(args):
     e = args.resume.split("/")[-1] if "/" in args.resume else args.resume
     e = e.split('_')[0]
     e = int(e)+1
+  elif args.resume_pre:
+    I,Iopt = torch.load(args.resume_pre)
+    I.enc.flatten_parameters()
+    I.vdec.flatten_parameters()
+    pe = args.resume_pre.split("/")[-1] if "/" in args.resume_pre else args.resume_pre
+    pe = pe.split('_')[-1]
+    pe = int(pe)+1
+    S = surface(args).cuda()
+    e=0
+    Sopt = torch.optim.Adam(S.parameters(), lr=args.lr)
+
   else:
     I = inter(args).cuda()
     S = surface(args).cuda()
     Iopt = torch.optim.Adam(I.parameters(), lr=args.lr)
     Sopt = torch.optim.Adam(S.parameters(), lr=args.lr)
     e=0
+    pe=0
   S.endtok = DS.vocab.index("<eos>")
   S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
   print(I)
   print(S)
   print(args.datafile)
   print(args.savestr)
-  for epoch in range(args.pretrainepochs):
+  for epoch in range(pe,args.pretrainepochs):
     trainloss = pretrain(I,DS,args,Iopt)
     print("train loss epoch",epoch,trainloss)
     torch.save((I,Iopt),args.savestr+"_pretrain_"+str(epoch))
+  print("done pretraining")
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(I,S,DS,args,Sopt)
     print("train loss epoch",epoch,trainloss)
-    if args.debug:
-      if epoch%10==9:
-        b = validate(I,S,DS,args)
-        print("valid bleu ",b)
-    else: 
-      b = validate(I,S,DS,args)
-      print("valid bleu ",b)
-      torch.save((I,S,Iopt,Sopt),args.savestr+args.epoch+"_bleu-"+str(b))
+    torch.save((I,S,Iopt,Sopt),args.savestr+args.epoch)
 
 if __name__=="__main__":
   args = parseParams()
