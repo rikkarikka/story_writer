@@ -7,7 +7,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch.autograd import Variable
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
-from preprocess import load_data
+from preprocess_new import load_data
 from arguments import s2s_bland as parseParams
 
 class model(nn.Module):
@@ -31,7 +31,7 @@ class model(nn.Module):
     self.beamsize = args.beamsize
 
   def beamsearch(self,inp):
-    inp = inp.unsqueeze(0)
+    #inp = inp.unsqueeze(0)
     encenc = self.encemb(inp)
     enc,(h,c) = self.enc(encenc)
 
@@ -165,26 +165,22 @@ class model(nn.Module):
 
 
 def validate(M,DS,args):
-  data = DS.val_batches
+  print(args.valid)
+  data = DS.new_data(args.valid)
   cc = SmoothingFunction()
   M.eval()
   refs = []
   hyps = []
-  i=0
-  for x in data:
-    sources, targets = DS.pad_batch(x,targ=False)
+  for sources,targets in data:
     sources = Variable(sources.cuda(),volatile=True)
     M.zero_grad()
     #logits = M(sources,None)
     #logits = torch.max(logits.data.cpu(),2)[1]
     #logits = [list(x) for x in logits]
-    logits = []
-    for s in sources:
-      logits.append(M.beamsearch(s))
-    hyp = [x[:x.index(1)] if 1 in x else x for x in logits]
-    hyp = [[DS.vocab[x] for x in y] for y in hyp]
-    hyps.extend(hyp)
-    refs.extend(targets)
+    logits = M.beamsearch(sources)
+    hyp = [DS.vocab[x] for x in logits]
+    hyps.append(hyp)
+    refs.append(targets)
   bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
   M.train()
   with open(args.savestr+"hyps"+args.epoch,'w') as f:
@@ -202,13 +198,15 @@ def validate(M,DS,args):
   return bleu
 
 def train(M,DS,args,optimizer):
-  data = DS.train_batches
   weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
   weights[0] = 0
   criterion = nn.CrossEntropyLoss(weights)
   trainloss = []
-  for x in data:
-    sources, targets = DS.pad_batch(x)
+  while True:
+    x = DS.get_batch()
+    if not x:
+      break
+    sources,targets = x
     sources = Variable(sources.cuda())
     targets = Variable(targets.cuda())
     M.zero_grad()
@@ -229,7 +227,6 @@ def main(args):
   if args.debug:
     args.bsz=2
     DS.train = DS.train[:2]
-    DS.valid= DS.valid[:2]
 
   args.vsz = DS.vsz
   args.svsz = DS.svsz
@@ -245,11 +242,10 @@ def main(args):
     optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
     e=0
   M.endtok = DS.vocab.index("<eos>")
-  M.punct = [DS.vocab.index(t) for t in ['.','!','?']]
+  M.punct = [DS.vocab.index(t) for t in ['.','!','?'] if t in DS.vocab]
   print(M)
   print(args.datafile)
   print(args.savestr)
-  b = validate(M,DS,args)
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(M,DS,args,optimizer)
