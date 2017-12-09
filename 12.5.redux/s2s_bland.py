@@ -36,61 +36,84 @@ class model(nn.Module):
     enc,(h,c) = self.enc(encenc)
 
     #enc hidden has bidirection so switch those to the features dim
-    h = torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) 
-    h = h.repeat(1,self.beamsize,1)
-    c = torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) 
-    c = c.repeat(1,self.beamsize,1)
-    enc = enc.repeat(self.beamsize,1,1)
+    h = [torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) for i in range(self.beamsize)]
+    c = [torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) for i in range(self.beamsize)]
+    encbeam = [enc for i in range(self.beamsize)]
 
-    op = Variable(torch.cuda.FloatTensor(self.beamsize,self.args.hsz).zero_())
-    prev = Variable(torch.cuda.LongTensor(self.beamsize,1).fill_(3))
+    ops = [Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()) for i in range(self.beamsize)]
+    prev = [Variable(torch.cuda.LongTensor(1,1).fill_(3)) for i in range(self.beamsize)]
     beam = [[] for x in range(self.beamsize)]
     scores = [0]*self.beamsize
+    sents = [0]*self.beamsize
     done = []
     donescores = []
     for i in range(self.args.maxlen):
-      
-      dembedding = self.decemb(prev)
-      decin = torch.cat((dembedding.squeeze(1),op),1).unsqueeze(1)
-      decout, (h,c) = self.dec(decin,(h,c))
+      tmp = []
+      for j in range(len(beam)):
+        dembedding = self.decemb(prev[j].view(1,1))
+        decin = torch.cat((dembedding.squeeze(1),ops[j].squeeze(1)),1).unsqueeze(1)
+        decout, (hx,cx) = self.dec(decin,(h[j],c[j]))
 
-      #attend on enc 
-      q = self.linin(decout.squeeze(1)).unsqueeze(2)
-      #q = decout.view(decout.size(0),decout.size(2),decout.size(1))
-      w = torch.bmm(enc,q).squeeze(2)
-      w = self.sm(w)
-      cc = torch.bmm(w.unsqueeze(1),enc)
-      op = torch.cat((cc,decout),2)
-      op = self.drop(self.tanh(self.linout(op)))
+        #attend on enc 
+        q = self.linin(decout.squeeze(1)).unsqueeze(2)
+        #q = decout.view(decout.size(0),decout.size(2),decout.size(1))
+        w = torch.bmm(enc,q).squeeze(2)
+        w = self.sm(w)
+        cc = torch.bmm(w.unsqueeze(1),enc)
+        op = torch.cat((cc,decout),2)
+        op = self.drop(self.tanh(self.linout(op)))
       
-      logits = self.gen(op)
-      prev = logits.max(2)
-      prev = prev[1]
-      op = op.squeeze(1)
-      probs = torch.stack([F.log_softmax(logits[i]) for i in range(self.beamsize)])
-      vals, pmax = torch.sort(probs,2)
-      upscores = vals[:,:,:self.beamsize]
-      upscores = torch.stack([upscores[i]+scores[i] for i in range(self.beamsize)])
-      vals, kmax = torch.sort(upscores.view(-1))
+        op2 = self.gen(op)
+        op2 = op2.squeeze()
+        probs = F.log_softmax(op2)
+        vals, pidx = probs.topk(self.beamsize*2,0)
+        vals = vals.squeeze()
+        pidx = pidx.squeeze()
+        for k in range(self.beamsize):
+          tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op))
+      tmp.sort(key=lambda x: x[0],reverse=True)
       newbeam = []
-      newscores = []
-      end = self.beamsize
-      for i in range(self.beamsize):
-        x = kmax[i].div(self.beamsize).data[0]
-        y = kmax[i].remainder(self.beamsize).data[0]
-        new = beam[x]+[pmax[x,0,y].data[0]]
-        newscore = scores[x]+vals[i].data[0]
-        if new[-1] == self.endtok:
-          done.append(new)
-          donescores.append(newscore)
-          end+=1
+      newscore = []
+      newsents = []
+      newh = []
+      newc = []
+      newops = []
+      newprev = []
+      added = 0
+      j = 0
+      while added < len(beam):
+        v,pidx,beamidx,hx,cx,op = tmp[j]
+        pdat = pidx.data[0]
+        new = beam[beamidx]+[pdat]
+        if pdat in self.punct:
+          newsents.append(sents[beamidx]+1)
         else:
-          newbeam.append(new)
-          newscores.append(newscore)
-      beam = newbeam
-      scores = newscores
-    done.extend(beam)
-    donescores.extend(scores)
+          newsents.append(sents[beamidx])
+        if pdat == self.endtok or newsents[-1]>4:
+          if new not in done:
+            done.append(new)
+            donescores.append(v)
+            added += 1
+        else:
+          if new not in newbeam:
+            newbeam.append(new)
+            newscore.append(v)
+            newh.append(hx)
+            newc.append(cx)
+            newops.append(op)
+            newprev.append(pidx)
+            added += 1
+        j+=1
+      beam = newbeam 
+      prev = newprev
+      scores = newscore
+      sents = newsents
+      h = newh
+      c = newc
+      ops = newops
+    if len(done)==0:
+      done.extend(beam)
+      donescores.extend(scores)
     donescores = [x/len(done[i]) for i,x in enumerate(donescores)]
     topscore =  donescores.index(max(donescores))
     return done[topscore]
@@ -149,7 +172,7 @@ def validate(M,DS,args):
   hyps = []
   i=0
   for x in data:
-    sources, targets = DS.pad_batch(x,targ=False,v=False)
+    sources, targets = DS.pad_batch(x,targ=False)
     sources = Variable(sources.cuda(),volatile=True)
     M.zero_grad()
     #logits = M(sources,None)
@@ -185,7 +208,7 @@ def train(M,DS,args,optimizer):
   criterion = nn.CrossEntropyLoss(weights)
   trainloss = []
   for x in data:
-    sources, targets = DS.pad_batch(x,v=False)
+    sources, targets = DS.pad_batch(x)
     sources = Variable(sources.cuda())
     targets = Variable(targets.cuda())
     M.zero_grad()
@@ -222,9 +245,11 @@ def main(args):
     optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
     e=0
   M.endtok = DS.vocab.index("<eos>")
+  M.punct = [DS.vocab.index(t) for t in ['.','!','?']]
   print(M)
   print(args.datafile)
   print(args.savestr)
+  b = validate(M,DS,args)
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(M,DS,args,optimizer)

@@ -6,8 +6,8 @@ from itertools import product
 from torch import nn
 from torch.autograd import Variable
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
-from preprocess import load_data
-from arguments import s2s as parseParams
+from verb_preprocess import load_data
+from arguments import s2s_inter as parseParams
 
 class model(nn.Module):
   def __init__(self,args):
