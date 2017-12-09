@@ -1,6 +1,12 @@
 import os
 import argparse
 
+def s2bool(v):
+  if v.lower()=='false':
+    return False
+  else:
+    return True
+
 def general():
   parser = argparse.ArgumentParser(description='none')
   # learning
@@ -15,7 +21,7 @@ def general():
   parser.add_argument('-resume', type=str, default=None)
   parser.add_argument('-train',type=str,default="data/train.txt.ner.9ref")
   parser.add_argument('-valid',type=str,default="data/valid.txt.ner.9ref")
-  parser.add_argument('-cuda',type=bool,default=True)
+  parser.add_argument('-cuda',type=s2bool,default=True)
   return parser
 
 def mkdir(args):

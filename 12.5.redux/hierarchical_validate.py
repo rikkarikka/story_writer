@@ -5,9 +5,8 @@ from torch import nn
 from torch.nn import functional as F
 from torch.autograd import Variable
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
-from arguments import s2s_inter as parseParams
-from inter_s2s import inter, surface
-from inter_preprocess_new import load_data
+from arguments import s2s as parseParams
+from preprocess_new import load_data
 import pickle
   
 def draw(inters,surface,attns,args):
@@ -55,10 +54,9 @@ def validate(I,S,DS,args,m):
     assert(len(hyps)==len(refs))
   draw(inters,hyps,attns,args)
   bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
-  print(bleu)
   I.train()
   S.train()
-  with open(args.savestr+"hyps"+m+"-bleu_"+str(bleu),'w') as f:
+  with open(args.savestr+"hyps"+m,'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
   try:

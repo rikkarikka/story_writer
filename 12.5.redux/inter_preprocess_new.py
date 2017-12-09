@@ -76,16 +76,25 @@ class load_data:
     srcnums = [[self.stoi[w] if w in self.stoi else 2 for w in x]+[1] for x in srcs]
     m = max([len(x) for x in srcnums])
     srcnums = [x+([0]*(m-len(x))) for x in srcnums]
-    tensor = torch.cuda.LongTensor(srcnums)
+    if self.args.cuda:
+      tensor = torch.cuda.LongTensor(srcnums)
+    else:
+      tensor = torch.LongTensor(srcnums)
     if targ:
       targtmp = [[self.vocab.index(w) if w in self.vocab else 2 for w in x]+[1] for x in tgts]
       m = max([len(x) for x in targtmp])
       targtmp = [x+([0]*(m-len(x))) for x in targtmp]
-      targs = torch.cuda.LongTensor(targtmp)
+      if self.args.cuda:
+        targs = torch.cuda.LongTensor(targtmp)
+      else:
+        targs = torch.LongTensor(targtmp)
     if v:
       m = max([len(x) for x in verbs])
       targtmp = [x+([0]*(m-len(x))) for x in verbs]
-      vtensor = torch.cuda.LongTensor(targtmp)
+      if self.args.cuda:
+        vtensor = torch.cuda.LongTensor(targtmp)
+      else:
+        vtensor = torch.LongTensor(targtmp)
       
     if v:
       return (tensor,targs,vtensor)
