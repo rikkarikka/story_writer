@@ -37,12 +37,12 @@ def s2s_inter():
   parser = general()
   parser.add_argument('-datafile', type=str, default="data/9ref_verbs.pt")
   parser.add_argument('-savestr',type=str,default="saved_models/9ref_s2s_inter_")
-  parser.add_argument('-verbs',type=str,default="data/train.verbs")
+  parser.add_argument('-interfile',type=str,default="data/train.verbs")
   parser.add_argument('-vmaxlen', type=int, default=15, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-pretrainepochs', type=int, default=15, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-resume_pre', type=str, default=None)
   args = parser.parse_args()
-  args.savestr = args.savestr+args.verbs.split("/")[-1]+"/"
+  args.savestr = args.savestr+args.interfile.split("/")[-1]+"/"
   mkdir(args)
   return args

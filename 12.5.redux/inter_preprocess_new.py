@@ -19,7 +19,7 @@ class load_data:
     self.svsz = len(self.itos)
 
     #make verbs
-    self.mkverbs(args.verbs)
+    self.mkverbs(args.interfile)
     print("verb data: ",len(self.verb_data))
 
     self.train = list(zip(train_sources,train_targets,self.verb_data))

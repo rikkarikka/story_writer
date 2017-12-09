@@ -1,4 +1,14 @@
-
+import sys
+import os
+import torch
+from torch import nn
+from torch.nn import functional as F
+from torch.autograd import Variable
+from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
+from arguments import s2s_inter as parseParams
+from inter_s2s import inter, surface
+from inter_preprocess_new import load_data
+import pickle
   
 def draw(inters,surface,attns,args):
   for i in range(len(inters)):
@@ -9,8 +19,9 @@ def draw(inters,surface,attns,args):
     with open(args.savestr+"attns/"+args.epoch+"-"+str(i),'wb') as f:
       pickle.dump((inters[i],surface[i],attns[i].data.cpu().numpy()),f)
 
-def validate(I,S,DS,args):
-  data = DS.val_batches
+def validate(I,S,DS,args,m):
+  print(args.valid)
+  data = DS.new_data(args.valid)
   cc = SmoothingFunction()
   I.eval()
   S.eval()
@@ -18,11 +29,7 @@ def validate(I,S,DS,args):
   hyps = []
   attns = []
   inters = []
-  for x in data:
-    if args.debug:
-      sources, targets, _= DS.pad_batch(x,targ=False)
-    else:
-      sources, targets = DS.pad_batch(x,targ=False,v=False)
+  for sources,targets in data:
     sources = Variable(sources,requires_grad=False)
     logits = []
     attn = []
@@ -49,7 +56,7 @@ def validate(I,S,DS,args):
   bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
   I.train()
   S.train()
-  with open(args.savestr+"hyps"+args.epoch,'w') as f:
+  with open(args.savestr+"hyps"+m,'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
   try:
@@ -63,3 +70,24 @@ def validate(I,S,DS,args):
       f.write('\n'.join(refstr))
   return bleu
 
+def main():
+  args = parseParams()
+  DS = torch.load(args.datafile)
+  models = [x for x in os.listdir(args.savestr) if x[0].isdigit()]
+  for m in models:
+    I,S,_,_ = torch.load(args.savestr+m)
+    if not args.cuda:
+      print('move to cpu')
+      S = S.cpu()
+      I = I.cpu()
+    S.dec.flatten_parameters()
+    I.enc.flatten_parameters()
+    I.vdec.flatten_parameters()
+    S.args = args
+    I.args = args
+    S.endtok = DS.vocab.index("<eos>")
+    S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
+    validate(I,S,DS,args,m)
+
+if __name__=="__main__":
+  main()
