@@ -14,7 +14,7 @@ c = Counter(titles)
 
 tests = []
 valids = []
-for thresh in [3,5,9]:
+for thresh in [5,9]:
   opts = [x for x in c if c[x]>=thresh]
   print(thresh,"+ refs : ",len(opts))
 
@@ -26,18 +26,19 @@ for thresh in [3,5,9]:
 
 trainf = open("train.all.txt",'w')
 
-skipidx = []
-for i in range(3):
-  skipidx.extend(tests[i])
-  skipidx.extend(valids[i])
+skiptitles = []
+for i in range(2):
+  skiptitles.extend(tests[i])
+  skiptitles.extend(valids[i])
 
-trainf.write("\n".join([x+'\t'+stories[i] for i,x in enumerate(titles) if i not in skipidx]))
+skiptitles = set(skiptitles)
+trainf.write("\n".join([x+'\t'+stories[i] for i,x in enumerate(titles) if x not in skiptitles]))
 trainf.close()
 trainidx = open("train.all.idxs",'w')
-trainidx.write('\n'.join([str(i) for i in range(len(titles)) if i not in skipidx]))
+trainidx.write('\n'.join([str(i) for i,x in enumerate(titles) if x not in skiptitles]))
 trainidx.close()
 
-for k,thresh in enumerate([3,5,9]):
+for k,thresh in enumerate([5,9]):
   threshstr = str(thresh)
   vidxf = open("valid."+threshstr+".idxs",'w')
   validf = open("valid."+threshstr+".txt",'w')

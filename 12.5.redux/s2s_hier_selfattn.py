@@ -18,7 +18,7 @@ class model(nn.Module):
     # encoder decoder stuff
     self.encemb = nn.Embedding(args.svsz,args.hsz,padding_idx=0)
     self.enc = nn.LSTM(args.hsz,args.hsz//2,bidirectional=True,num_layers=args.layers,batch_first=True)
-    self.inter = nn.LSTM(args.hsz,args.hsz,num_layers=args.layers,batch_first=True)
+    self.inter = nn.LSTM(args.hsz*2,args.hsz,num_layers=args.layers,batch_first=True)
     self.decemb = nn.Embedding(args.vsz,args.hsz,padding_idx=0)
     self.dec = nn.LSTM(args.hsz*3,args.hsz,num_layers=args.layers,batch_first=True)
     self.gen = nn.Linear(args.hsz,args.vsz)
@@ -152,14 +152,13 @@ class model(nn.Module):
     h = torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) 
     c = torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) 
 
-    
     hinter = []
     cinter = []
     interout = []
     for i in range(inp.size(0)):
       hinter.append(Variable(h.data[:,i,:]).unsqueeze(1).contiguous())
       cinter.append(Variable(c.data[:,i,:]).unsqueeze(1).contiguous())
-      iout, (hinter[i], cinter[i]) = self.inter(Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()),
+      iout, (hinter[i], cinter[i]) = self.inter(Variable(torch.cuda.FloatTensor(1,1,self.args.hsz*2).zero_()),
                                                 (hinter[i],cinter[i]))
       interout.append(iout)
 
@@ -192,7 +191,8 @@ class model(nn.Module):
         changes = changeidx.nonzero()
         for k in changes:
           k = k.cpu()[0]
-          iout, (hinter[k], cinter[k]) = self.inter(interout[k],(hinter[k],cinter[k]))
+          iin = torch.cat((op[k].unsqueeze(0), interout[k]),2)
+          iout, (hinter[k], cinter[k]) = self.inter(iin,(hinter[k],cinter[k]))
           interout[k] = iout
         op = op.squeeze(1)
           
