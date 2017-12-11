@@ -34,15 +34,7 @@ def validate(S,DS,args,m):
     print(title)
     continue
     sources = Variable(sources,requires_grad=False)
-    logits = []
-    attn = []
-    for s in sources:
-      s = s.unsqueeze(0).contiguous()
-      l,a = S.beamsearch(s)
-      logits.append(l)
-      attn.append(a)
-      #ihyp = [[DS.verb_vocab[x] for x in list(y)] for y in preds.data]
-      #inters.extend(ihyp)
+    logits,a = S.beamsearch(s)
     attns.append(torch.cat(a,0))
     logits = logits[0]
     hyp = [DS.vocab[x] for x in logits]

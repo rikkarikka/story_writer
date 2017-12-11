@@ -54,12 +54,24 @@ class model(nn.Module):
     hinter = []
     cinter = []
     interout = []
+    nprev = []
+    vprev = []
+    interstack = []
     for i in range(self.beamsize):
       hinter.append(Variable(he.data).contiguous())
       cinter.append(Variable(ce.data).contiguous())
       iout, (hinter[i], cinter[i]) = self.inter(Variable(torch.cuda.FloatTensor(1,1,self.args.hsz*2).zero_()),
                                                 (hinter[i],cinter[i]))
       interout.append(iout)
+
+      nbest = self.noungen(iout)
+      _,nmax = torch.max(nbest,2)
+      vbest = self.verbgen(iout)
+      _,vmax = torch.max(vbest,2)
+      nemb = self.internoun(nmax)
+      vemb = self.interverb(vmax)
+      #print(nemb.size(),vemb.size())
+      interstack.append(torch.cat((nemb,vemb),2))
 
     ops = [Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()) for i in range(self.beamsize)]
     prev = [Variable(torch.cuda.LongTensor(1,1).fill_(3)) for i in range(self.beamsize)]
@@ -80,9 +92,17 @@ class model(nn.Module):
           iin = torch.cat((ops[j], interout[j]),2)
           iout, (hinter[j], cinter[j]) = self.inter(iin,(hinter[j],cinter[j]))
           interout[j] = iout
+          nbest = self.noungen(iout)
+          #print(nbest.size())
+          _,nmax = torch.max(nbest,2)
+          vbest = self.verbgen(iout)
+          _,vmax = torch.max(vbest,2)
+          nemb = self.internoun(nmax)
+          vemb = self.interverb(vmax)
+          interstack[j] = torch.cat((nemb,vemb),2)
         dembedding = self.decemb(prev[j].view(1,1))
-        interstack = torch.cat(interout,0)
-        decin = torch.cat((dembedding.squeeze(1),ops[j].squeeze(0),interstack[j]),1).unsqueeze(1)
+        #print(dembedding.size(),ops[j].size(),interstack[j].size())
+        decin = torch.cat((dembedding.squeeze(1),ops[j].squeeze(0),interstack[j].squeeze(0)),1).unsqueeze(1)
         decout, (hx,cx) = self.dec(decin,(h[j],c[j]))
 
         #attend on enc 

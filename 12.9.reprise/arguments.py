@@ -35,6 +35,7 @@ def s2s_hierarchical():
   parser.add_argument('-datafile', type=str, default="data/traincats.pt")
   parser.add_argument('-savestr',type=str,default="saved_models/s2s_hierarchical/")
   parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-vmodel',type=str, default=None)
   args = parser.parse_args()
   mkdir(args)
   return args
@@ -45,6 +46,7 @@ def s2s_hier_cats():
   parser.add_argument('-savestr',type=str,default="saved_models/s2s_hier_cats/")
   parser.add_argument('-interfile',type=str,default="data/train.cats")
   parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-vmodel',type=str, default=None)
   args = parser.parse_args()
   mkdir(args)
   return args

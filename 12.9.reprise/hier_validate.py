@@ -23,6 +23,7 @@ def draw(inters,surface,attns,args):
 
 def validate(S,DS,args,m):
   print(m,args.valid)
+  S.beamsize = args.beamsize
   data = DS.new_data(args.valid)
   cc = SmoothingFunction()
   S.eval()
@@ -30,7 +31,10 @@ def validate(S,DS,args,m):
   hyps = []
   attns = []
   inters = []
+  titles = []
   for sources,targets in data:
+    title = [DS.itos[x] for x in sources[0]]
+    titles.append(" ".join(title))
     sources = Variable(sources,requires_grad=False)
     logits = []
     attn = []
@@ -38,17 +42,17 @@ def validate(S,DS,args,m):
     logits.append(l)
     attn.append(a)
     attns.append(torch.cat(a,0))
-    print(logits[0])
     hyp = [DS.vocab[x] for x in logits[0]]
     hyps.append(hyp)
-    print(hyp)
-    exit()
+    print(' '.join(hyp))
     refs.append(targets)
     assert(len(hyps)==len(refs))
   draw(inters,hyps,attns,args)
   bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
   print(bleu)
   S.train()
+  with open(args.savestr+"titles",'w') as f:
+    f.write("\n".join(titles))
   with open(args.savestr+"hyps"+m+"-bleu_"+str(bleu),'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
@@ -63,27 +67,30 @@ def validate(S,DS,args,m):
       f.write('\n'.join(refstr))
   return bleu
 
-def main():
-  args = parseParams()
+def main(args,m):
   DS = torch.load(args.datafile)
   DS.args = args
-  models = [x for x in os.listdir(args.savestr) if x[0].isdigit()]
-  models.sort(key=lambda x: int(x), reverse=True)
-  for m in models:
-    print(m)
-    args.epoch = m
-    S,_ = torch.load(args.savestr+m)
-    if not args.cuda:
-      print('move to cpu')
-      S = S.cpu()
-    S.dec.flatten_parameters()
-    S.enc.flatten_parameters()
-    S.inter.flatten_parameters()
-    S.args = args
-    S.endtok = DS.vocab.index("<eos>")
-    S.vendtok = DS.verb_vocab.index("<eos>")
-    S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
-    validate(S,DS,args,m)
+  print(m)
+  args.epoch = m
+  S,_ = torch.load(args.savestr+m)
+  if not args.cuda:
+    print('move to cpu')
+    S = S.cpu()
+  S.dec.flatten_parameters()
+  S.enc.flatten_parameters()
+  S.inter.flatten_parameters()
+  S.args = args
+  S.endtok = DS.vocab.index("<eos>")
+  S.vendtok = DS.verb_vocab.index("<eos>")
+  S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
+  validate(S,DS,args,m)
 
 if __name__=="__main__":
-  main()
+  args = parseParams()
+  if args.vmodel:
+    models = [args.vmodel]
+  else:
+    models = [x for x in os.listdir(args.savestr) if x[0].isdigit()]
+    models.sort(reverse=True)
+  for m in models:
+    main(args,m)
