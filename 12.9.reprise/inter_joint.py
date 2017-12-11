@@ -220,8 +220,8 @@ class surface(nn.Module):
       donescores.extend(scores)
     donescores = [x/len(done[i]) for i,x in enumerate(donescores)]
     topscore = donescores.index(max(donescores))
-    verbs = done[topscore]
-    verbs = [3]+verbs+[1]
+    verbsl = done[topscore]
+    verbs = [3]+verbsl+[1]
     if self.args.cuda:
       verbs = Variable(torch.cuda.LongTensor(verbs).unsqueeze(0))
     else:
@@ -325,7 +325,7 @@ class surface(nn.Module):
       doneattns = attns
     donescores = [x/len(done[i]) for i,x in enumerate(donescores)]
     topscore =  donescores.index(max(donescores))
-    return done[topscore], doneattns[topscore]
+    return done[topscore], doneattns[topscore], verbsl
 
 def train(S,DS,args,optimizer):
   weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
@@ -402,7 +402,6 @@ def main(args):
   print(args.savestr)
   S.pretrain = True
   S.posttrain = False
-  '''
   for epoch in range(pe,args.pretrainepochs):
     trainloss = train(S,DS,args,Sopt)
     print("train loss epoch",epoch,trainloss)
@@ -410,6 +409,7 @@ def main(args):
   print("done pretraining")
   S.pretrain = False
   S.args.vminlen = 5
+  '''
   e = pe
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)

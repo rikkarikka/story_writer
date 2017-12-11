@@ -30,16 +30,16 @@ def validate(S,DS,args,m):
   inters = []
   titles = []
   for sources,targets in data:
-    title = [DS.itos[x] for x in sources[0]]
-    print(title)
-    continue
     sources = Variable(sources,requires_grad=False)
-    logits,a = S.beamsearch(s)
+    logits,a,v = S.beamsearch(sources)
     attns.append(torch.cat(a,0))
-    logits = logits[0]
+    verbs = [DS.verb_vocab[x] for x in v]
+    print(verbs)
     hyp = [DS.vocab[x] for x in logits]
     hyps.append(hyp)
     print(hyp)
+    exit()
+    
     refs.append(targets)
     assert(len(hyps)==len(refs))
   draw(inters,hyps,attns,args)
