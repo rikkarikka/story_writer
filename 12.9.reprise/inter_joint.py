@@ -221,7 +221,7 @@ class surface(nn.Module):
     donescores = [x/len(done[i]) for i,x in enumerate(donescores)]
     topscore = donescores.index(max(donescores))
     verbs = done[topscore]
-    verbs = [1]+verbs
+    verbs = [3]+verbs+[1]
     if self.args.cuda:
       verbs = Variable(torch.cuda.LongTensor(verbs).unsqueeze(0))
     else:
@@ -385,7 +385,10 @@ def main(args):
     S.vdec.flatten_parameters()
     S.dec.flatten_parameters()
     e = args.resume.split("/")[-1] if "/" in args.resume else args.resume
-    e = e.split('_')[0]
+    if "post" in e:
+      e = e.split("_")[-1]
+    else:
+      e = e.split('_')[0]
     e = int(e)+1
   else:
     S = surface(args).cuda()

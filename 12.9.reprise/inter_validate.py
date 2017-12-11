@@ -28,7 +28,11 @@ def validate(S,DS,args,m):
   hyps = []
   attns = []
   inters = []
+  titles = []
   for sources,targets in data:
+    title = [DS.itos[x] for x in sources[0]]
+    print(title)
+    continue
     sources = Variable(sources,requires_grad=False)
     logits = []
     attn = []
