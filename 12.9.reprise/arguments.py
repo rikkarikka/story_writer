@@ -20,7 +20,7 @@ def general():
   parser.add_argument('-debug', action="store_true")
   parser.add_argument('-resume', type=str, default=None)
   parser.add_argument('-train',type=str,default="data/train.all.txt")
-  parser.add_argument('-valid',type=str,default="data/valid.3.txt")
+  parser.add_argument('-valid',type=str,default="data/valid.5.txt")
   parser.add_argument('-cuda',type=s2bool,default=True)
   return parser
 
@@ -57,8 +57,10 @@ def s2s_inter():
   parser.add_argument('-vmaxlen', type=int, default=15, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-vminlen', type=int, default=5, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-pretrainepochs', type=int, default=15, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-posttrainepochs', type=int, default=5, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-resume_pre', type=str, default=None)
+  parser.add_argument('-vmodel',type=str, default=None)
   args = parser.parse_args()
   args.savestr = args.savestr+args.interfile.split("/")[-1]+"/"
   mkdir(args)

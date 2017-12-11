@@ -64,27 +64,30 @@ def validate(S,DS,args,m):
       f.write('\n'.join(refstr))
   return bleu
 
-def main():
-  args = parseParams()
+def main(args,m):
   DS = torch.load(args.datafile)
   DS.args = args
-  models = [x for x in os.listdir(args.savestr) if x[0].isdigit()]
-  models.sort(reverse=True)
-  for m in models:
-    print(m)
-    args.epoch = m
-    S,_ = torch.load(args.savestr+m)
-    if not args.cuda:
-      print('move to cpu')
-      S = S.cpu()
-    S.dec.flatten_parameters()
-    S.enc.flatten_parameters()
-    S.vdec.flatten_parameters()
-    S.args = args
-    S.endtok = DS.vocab.index("<eos>")
-    S.vendtok = DS.verb_vocab.index("<eos>")
-    S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
-    validate(S,DS,args,m)
+  print(m)
+  args.epoch = m
+  S,_ = torch.load(args.savestr+m)
+  if not args.cuda:
+    print('move to cpu')
+    S = S.cpu()
+  S.dec.flatten_parameters()
+  S.enc.flatten_parameters()
+  S.vdec.flatten_parameters()
+  S.args = args
+  S.endtok = DS.vocab.index("<eos>")
+  S.vendtok = DS.verb_vocab.index("<eos>")
+  S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
+  validate(S,DS,args,m)
 
 if __name__=="__main__":
-  main()
+  args = parseParams()
+  if args.vmodel:
+    models = [args.vmodel]
+  else:
+    models = [x for x in os.listdir(args.savestr) if x[0].isdigit()]
+    models.sort(reverse=True)
+  for m in models:
+    main(args,m)

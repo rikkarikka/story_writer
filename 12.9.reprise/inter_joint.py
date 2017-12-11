@@ -77,6 +77,7 @@ class surface(nn.Module):
     for i in range(voutputs.size(1)):
       vout.append(self.vgen(voutputs[:,i,:]))
     vout = torch.stack(vout,1)
+    voutputs = self.vemb(verbs)
     if self.pretrain:
       return vout
 
@@ -354,6 +355,10 @@ def train(S,DS,args,optimizer):
     verbs = verbs.view(-1)
     if S.pretrain:
       loss = criterion2(vout,verbs)
+    elif S.posttrain:
+      logits = logits.view(-1,logits.size(2))
+      targets = targets.view(-1)
+      loss = criterion(logits, targets) 
     else: 
       logits = logits.view(-1,logits.size(2))
       targets = targets.view(-1)
@@ -375,8 +380,9 @@ def main(args):
   args.svsz = DS.svsz
   args.verbvsz = DS.vvsz
   if args.resume:
-    S,optimizer = torch.load(args.resume)
+    S,Sopt = torch.load(args.resume)
     S.enc.flatten_parameters()
+    S.vdec.flatten_parameters()
     S.dec.flatten_parameters()
     e = args.resume.split("/")[-1] if "/" in args.resume else args.resume
     e = e.split('_')[0]
@@ -392,6 +398,8 @@ def main(args):
   print(args.datafile)
   print(args.savestr)
   S.pretrain = True
+  S.posttrain = False
+  '''
   for epoch in range(pe,args.pretrainepochs):
     trainloss = train(S,DS,args,Sopt)
     print("train loss epoch",epoch,trainloss)
@@ -399,11 +407,23 @@ def main(args):
   print("done pretraining")
   S.pretrain = False
   S.args.vminlen = 5
+  e = pe
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(S,DS,args,Sopt)
     print("train loss epoch",epoch,trainloss)
     torch.save((S,Sopt),args.savestr+args.epoch)
+  '''
+  S.posttrain = True
+  S.pretrain = False
+  print('posttraining')
+  for epoch in range(e,e+args.posttrainepochs):
+    print(epoch)
+    args.epoch = str(epoch)
+    trainloss = train(S,DS,args,Sopt)
+    print("train loss epoch",epoch,trainloss)
+    torch.save((S,Sopt),args.savestr+"_post_"+args.epoch)
+    
 
 if __name__=="__main__":
   args = parseParams()
