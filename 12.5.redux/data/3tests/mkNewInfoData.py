@@ -83,7 +83,7 @@ def make_files():
     else:
       if hyper in hypos:
         extras.append(hyper)
-        extras.extend(hypos)
+      extras.extend(hypos)
     return extras
     '''
     s = hyper.hyponyms()
@@ -142,7 +142,7 @@ def make_wordd():
   print(len(wordassoc))
   return wordassoc,cats
 
-toocommon = "seem"
+toocommon = []
 
 def make_data():
   wnl = WNL()
@@ -186,14 +186,18 @@ def make_data():
             continue
         else:
           continue
-      nouns = [x for x in nouns if x not in newl and x not in toocommon]
-      verbs = [x for x in verbs if x not in newl and x not in toocommon]
-      if nouns:
-        newl.append(nouns[0])
+      nounss = [x for x in nouns if x not in newl and x not in toocommon]
+      verbss = [x for x in verbs if x not in newl and x not in toocommon]
+      if not nouns:
+        newl.append("<nonoun>")
+      elif nounss:
+        newl.append(nounss[0])
       else:
         newl.append("<oldnoun>")
-      if verbs:
-        newl.append(verbs[0])
+      if not verbs:
+        newl.append("<noverb>")
+      elif verbss:
+        newl.append(verbss[0])
       else:
         newl.append("<oldverb>")
 
