@@ -8,8 +8,8 @@ from torch.nn import functional as F
 from torch.autograd import Variable
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
 from hier_preprocess import load_data
-from arguments import s2s_hier_cats as parseParams
-from s2s_hier_cats import model,jointloss
+from arguments import s2s_hier_attn as parseParams
+from s2s_hier_attn import model,jointloss
 import pickle
   
 def draw(inters,surface,attns,args):
@@ -35,6 +35,7 @@ def validate(S,DS,args,m):
   for sources,targets in data:
     title = [DS.itos[x] for x in sources[0]]
     titles.append(" ".join(title))
+    print(title)
     sources = Variable(sources,requires_grad=False)
     logits = []
     attn = []
