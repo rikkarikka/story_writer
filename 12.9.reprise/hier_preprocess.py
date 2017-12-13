@@ -39,10 +39,10 @@ class load_data:
       x = x.split(" ")
       self.noun_data.append(x[::2])
       self.verb_data.append(x[1::2])
-    vctr = list(set([x for y in self.verb_data for x in y]))
-    nctr = list(set([x for y in self.noun_data for x in y]))
-    self.verb_vocab = ["<pad>","<eos>","<unk>","<start>"]+vctr
-    self.noun_vocab = ["<pad>","<eos>","<unk>","<start>"]+nctr
+    vctr = Counter([x for y in self.verb_data for x in y])
+    nctr = Counter([x for y in self.noun_data for x in y])
+    self.verb_vocab = ["<pad>","<eos>","<unk>","<start>"]+[x for x in vctr if vctr[x]>4]
+    self.noun_vocab = ["<pad>","<eos>","<unk>","<start>"]+[x for x in nctr if nctr[x]>4]
     self.noun_data = [[3]+[self.noun_vocab.index(x) if x in self.noun_vocab else 2 for x in y]+[1] for y in self.noun_data]
     self.verb_data = [[3]+[self.verb_vocab.index(x) if x in self.verb_vocab else 2 for x in y]+[1] for y in self.verb_data]
     print("verb vocab size: ",len(self.verb_vocab))

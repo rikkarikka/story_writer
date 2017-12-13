@@ -38,8 +38,6 @@ def validate(S,DS,args,m):
     hyp = [DS.vocab[x] for x in logits]
     hyps.append(hyp)
     print(hyp)
-    exit()
-    
     refs.append(targets)
     assert(len(hyps)==len(refs))
   draw(inters,hyps,attns,args)

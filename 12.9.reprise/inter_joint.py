@@ -409,14 +409,12 @@ def main(args):
   print("done pretraining")
   S.pretrain = False
   S.args.vminlen = 5
-  '''
   e = pe
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
     trainloss = train(S,DS,args,Sopt)
     print("train loss epoch",epoch,trainloss)
     torch.save((S,Sopt),args.savestr+args.epoch)
-  '''
   S.posttrain = True
   S.pretrain = False
   print('posttraining')
