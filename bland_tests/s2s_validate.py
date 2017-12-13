@@ -166,7 +166,7 @@ class model(nn.Module):
 
 def validate(M,DS,args):
   print(args.valid)
-  data = DS.new_data(args.valid)
+  data = DS.new_data(args.valid,targ=True)
   cc = SmoothingFunction()
   M.eval()
   refs = []
@@ -177,52 +177,15 @@ def validate(M,DS,args):
   trainloss = []
   for sources,targets in data:
     sources = Variable(sources.cuda(),volatile=True)
-    print(sources)
-    print(targets);exit()
+    targets = Variable(targets.cuda(),volatile=True)
     M.zero_grad()
-    logits = M.beamsearch(sources)
-    hyp = [DS.vocab[x] for x in logits]
-    hyps.append(hyp)
-    refs.append(targets)
-  bleu = corpus_bleu(refs,hyps,emulate_multibleu=True,smoothing_function=cc.method3)
-  M.train()
-  with open(args.savestr+"hyps"+args.epoch,'w') as f:
-    hyps = [' '.join(x) for x in hyps]
-    f.write('\n'.join(hyps))
-  try:
-    os.stat(args.savestr+"refs")
-  except:
-    with open(args.savestr+"refs",'w') as f:
-      refstr = []
-      for r in refs:
-        r = [' '.join(x) for x in r]
-        refstr.append('\n'.join(r))
-      f.write('\n'.join(refstr))
-  return bleu
-
-def train(M,DS,args,optimizer):
-  weights = torch.cuda.FloatTensor(args.vsz).fill_(1)
-  weights[0] = 0
-  criterion = nn.CrossEntropyLoss(weights)
-  trainloss = []
-  while True:
-    x = DS.get_batch()
-    if not x:
-      break
-    sources,targets = x
-    sources = Variable(sources.cuda())
-    targets = Variable(targets.cuda())
-    M.zero_grad()
-    logits = M(sources,targets)
-    logits = logits.view(-1,logits.size(2))
-    targets = targets.view(-1)
-
-    loss = criterion(logits, targets)
-    loss.backward()
+    logits = M(sources)
+    logits = logits.repeat(targets.size(0),1,1)
+    size = min(logits.size(1),targets.size(1))
+    targets = targets[:,:size].contiguous()
+    logits = logits[:,:size,:].contiguous()
+    loss = criterion(logits.view(-1,logits.size(2)),targets.view(-1))
     trainloss.append(loss.data.cpu()[0])
-    optimizer.step()
-
-    if len(trainloss)%100==99: print(trainloss[-1])
   return sum(trainloss)/len(trainloss)
 
 def main(args):
@@ -233,24 +196,19 @@ def main(args):
 
   args.vsz = DS.vsz
   args.svsz = DS.svsz
-  if args.resume:
-    M,optimizer = torch.load(args.resume)
+  output = open("losses_blandval.txt",'w')
+  output.write(args.datafile+'\n')
+  for mname in [x for x in os.listdir(args.savestr) if x[0].isdigit()]:
+    M,optimizer = torch.load(args.savestr+"/"+mname)
     M.enc.flatten_parameters()
     M.dec.flatten_parameters()
-    e = args.resume.split("/")[-1] if "/" in args.resume else args.resume
-    e = e.split('_')[0]
-    e = int(e)+1
-  else:
-    M = model(args).cuda()
-    optimizer = torch.optim.Adam(M.parameters(), lr=args.lr)
-    e=0
-  M.endtok = DS.vocab.index("<eos>")
-  M.punct = [DS.vocab.index(t) for t in ['.','!','?'] if t in DS.vocab]
-  print(M)
-  print(args.datafile)
-  print(args.savestr)
-  b = validate(M,DS,args)
-  print("valid loss ",b)
+    M.endtok = DS.vocab.index("<eos>")
+    M.punct = [DS.vocab.index(t) for t in ['.','!','?'] if t in DS.vocab]
+    b = validate(M,DS,args)
+
+    print(mname + "valid loss ",b)
+    output.write(mname + '\t' + str(b) + '\n')
+  output.close()
 
 if __name__=="__main__":
   args = parseParams()
