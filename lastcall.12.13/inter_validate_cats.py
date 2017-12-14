@@ -49,15 +49,15 @@ def validate(S,DS,args,m):
     print([DS.verb_vocab[x] for x in verbs])
     refs.append(targets)
     assert(len(hyps)==len(refs))
-  with open(args.savestr+"titles",'w') as f:
+  with open(m+"titles",'w') as f:
     f.write("\n".join(titles))
-  with open(args.savestr+"hyps"+m+,'w') as f:
+  with open(m+"hyps",'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
   try:
-    os.stat(args.savestr+"refs")
+    os.stat(m+"refs")
   except:
-    with open(args.savestr+"refs",'w') as f:
+    with open(m+"refs",'w') as f:
       refstr = []
       for r in refs:
         r = [' '.join(x) for x in r]

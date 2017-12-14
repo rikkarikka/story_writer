@@ -159,7 +159,7 @@ class model(nn.Module):
           if pdat == 2:
             continue
           else:
-            tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op))
+            tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op,sents[j]))
             donectr+=1
       tmp.sort(key=lambda x: x[0],reverse=True)
       newbeam = []
@@ -179,10 +179,9 @@ class model(nn.Module):
       newcounts = []
       j = 0
       while added < len(beam):
-        v,pidx,beamidx,hx,cx,op = tmp[j]
+        v,pidx,beamidx,hx,cx,op,sentlen = tmp[j]
         pdat = pidx.data[0]
         new = beam[beamidx]+[pdat]
-        sentlen = sents[beamidx]
         if pdat in self.punct:
           sentlen+=1
         if pdat == self.endtok or sentlen>4:
@@ -200,7 +199,6 @@ class model(nn.Module):
             continue
         else:
           if new not in newbeam:
-            newsents.append(sents[beamidx])
             newsents.append(sentlen)
             newinters.append([x for x in inters[beamidx]])
             newbeam.append(new)
@@ -216,7 +214,7 @@ class model(nn.Module):
             newinterout.append(interout[beamidx])
             newencbeam.append(encbeam[beamidx])
             added += 1
-        j+=1
+          j+=1
       beam = newbeam 
       changecounts = newcounts
       prev = newprev
@@ -240,148 +238,6 @@ class model(nn.Module):
     print(donecounts[topscore])
     return done[topscore], doneattns[topscore], doneinters[topscore]
 
-  def badbeams(self,inp):
-    #inp = inp.unsqueeze(0)
-    encenc = self.encemb(inp)
-    enc,(h,c) = self.enc(encenc)
-
-    #enc hidden has bidirection so switch those to the features dim
-    he = torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) 
-    ce = torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) 
-    h = [torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) for i in range(self.beamsize)]
-    c = [torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) for i in range(self.beamsize)]
-    encbeam = [enc for i in range(self.beamsize)]
-    
-    hinter = []
-    cinter = []
-    interout = []
-    nprev = []
-    vprev = []
-    interstack = []
-    for i in range(self.beamsize):
-      hinter.append(Variable(he.data).contiguous())
-      cinter.append(Variable(ce.data).contiguous())
-      iout, (hinter[i], cinter[i]) = self.inter(Variable(torch.cuda.FloatTensor(1,1,self.args.hsz*2).zero_()),
-                                                (hinter[i],cinter[i]))
-      interout.append(iout)
-
-      nbest = self.noungen(iout)
-      _,nmax = torch.max(nbest,2)
-      vbest = self.verbgen(iout)
-      _,vmax = torch.max(vbest,2)
-      nemb = self.internoun(nmax)
-      vemb = self.interverb(vmax)
-      #print(nemb.size(),vemb.size())
-      interstack.append(torch.cat((nemb,vemb),2))
-
-    ops = [Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()) for i in range(self.beamsize)]
-    prev = [Variable(torch.cuda.LongTensor(1,1).fill_(3)) for i in range(self.beamsize)]
-    beam = [[] for x in range(self.beamsize)]
-    scores = [0]*self.beamsize
-    sents = [0]*self.beamsize
-    done = []
-    donescores = []
-    doneattns = []
-    attns = [[] for _ in range(self.beamsize)]
-    for i in range(self.args.maxlen):
-      tmp = []
-      for j in range(len(beam)):
-        changej = 0
-        for t in self.punct:
-          changej += prev[j].squeeze().data.eq(t)[0]
-        if changej>0:
-          iin = torch.cat((op[j].unsqueeze(0), interstack[j].view(1,1,-1)),2)
-          iout, (hinter[j], cinter[j]) = self.inter(iin,(hinter[j],cinter[j]))
-          interout[j] = iout
-          nbest = self.noungen(iout)
-          #print(nbest.size())
-          _,nmax = torch.max(nbest,2)
-          vbest = self.verbgen(iout)
-          _,vmax = torch.max(vbest,2)
-          nemb = self.internoun(nmax)
-          vemb = self.interverb(vmax)
-          interstack[j] = torch.cat((nemb,vemb),2)
-        dembedding = self.decemb(prev[j].view(1,1))
-        #print(dembedding.size(),ops[j].size(),interstack[j].size())
-        decin = torch.cat((dembedding.squeeze(1),ops[j].squeeze(0),interstack[j].squeeze(0)),1).unsqueeze(1)
-        decout, (hx,cx) = self.dec(decin,(h[j],c[j]))
-
-        #attend on enc 
-        q = self.linin(decout.squeeze(1)).unsqueeze(2)
-        #q = decout.view(decout.size(0),decout.size(2),decout.size(1))
-        w = torch.bmm(enc,q).squeeze(2)
-        w = self.sm(w)
-        attns[j].append(w)
-        cc = torch.bmm(w.unsqueeze(1),enc)
-        op = torch.cat((cc,decout),2)
-        op = self.drop(self.tanh(self.linout(op)))
-      
-        op2 = self.gen(op)
-        op2 = op2.squeeze()
-        probs = F.log_softmax(op2)
-        vals, pidx = probs.topk(self.beamsize*2,0)
-        vals = vals.squeeze()
-        pidx = pidx.squeeze()
-        for k in range(self.beamsize):
-          tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op))
-      tmp.sort(key=lambda x: x[0],reverse=True)
-      newbeam = []
-      newscore = []
-      newsents = []
-      newh = []
-      newc = []
-      newops = []
-      newprev = []
-      newinterout = []
-      newhinter = []
-      newcinter = []
-      newattns = []
-      added = 0
-      j = 0
-      while added < len(beam):
-        v,pidx,beamidx,hx,cx,op = tmp[j]
-        pdat = pidx.data[0]
-        new = beam[beamidx]+[pdat]
-        if pdat in self.punct:
-          newsents.append(sents[beamidx]+1)
-        else:
-          newsents.append(sents[beamidx])
-        if pdat == self.endtok or newsents[-1]>4:
-          if new not in done:
-            done.append(new)
-            donescores.append(v)
-            doneattns.append(attns[beamidx])
-            added += 1
-        else:
-          if new not in newbeam:
-            newbeam.append(new)
-            newscore.append(v)
-            newh.append(hx)
-            newc.append(cx)
-            newhinter.append(hinter[beamidx])
-            newcinter.append(cinter[beamidx])
-            newops.append(op)
-            newprev.append(pidx)
-            newattns.append(attns[beamidx])
-            newinterout.append(interout[beamidx])
-            added += 1
-        j+=1
-      beam = newbeam 
-      prev = newprev
-      scores = newscore
-      sents = newsents
-      interout = newinterout
-      h = newh
-      c = newc
-      ops = newops
-    if len(done)==0:
-      done.extend(beam)
-      donescores.extend(scores)
-      doneattns.extend(attns)
-    donescores = [x/len(done[i]) for i,x in enumerate(donescores)]
-    print(donescores)
-    topscore =  donescores.index(max(donescores))
-    return done[topscore], doneattns[topscore]
       
   def forward(self,inp,verbs,nouns,out=None):
     encenc = self.encemb(inp)
