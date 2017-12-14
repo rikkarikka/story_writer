@@ -61,11 +61,11 @@ class load_data:
       self.bctr+=k
     return self.pad_batch((srcs,tgts,verbs))
 
-  def new_data(self,fn):
+  def new_data(self,fn,targ=False):
     src,tgt = self.ds(fn)
     new = []
     for i in range(len(src)):
-      new.append(self.pad_batch(([src[i]],tgt[i]),targ=False,v=False))
+      new.append(self.pad_batch(([src[i]],tgt[i]),targ=targ,v=False))
     return new
 
   def pad_batch(self,batch,targ=True,v=True):
