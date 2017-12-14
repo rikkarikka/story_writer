@@ -9,7 +9,7 @@ from torch.autograd import Variable
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
 from hier_preprocess import load_data
 from arguments import s2s_hier_cats as parseParams
-from s2s_hier_cats import model,jointloss
+from s2s_hier_cats2 import model,jointloss
 import pickle
   
 def draw(inters,surface,attns,args):
@@ -60,7 +60,7 @@ def validate(S,DS,args,m):
   S.train()
   with open(args.savestr+"titles",'w') as f:
     f.write("\n".join(titles))
-  with open(args.savestr+"hyps"+m+"-bleu_"+str(bleu),'w') as f:
+  with open(m+"-bleu_"+str(bleu),'w') as f:
     hyps = [' '.join(x) for x in hyps]
     f.write('\n'.join(hyps))
   try:
@@ -79,7 +79,7 @@ def main(args,m):
   DS.args = args
   print(m)
   args.epoch = m
-  S,_ = torch.load(args.savestr+m)
+  S,_ = torch.load(m)
   if not args.cuda:
     print('move to cpu')
     S = S.cpu()

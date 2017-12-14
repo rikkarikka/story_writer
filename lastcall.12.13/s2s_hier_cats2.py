@@ -117,7 +117,7 @@ class model(nn.Module):
           changej += prev[j].squeeze().data.eq(t)[0]
         if changej>0:
           changecounts[j] += 1
-          iin = torch.cat((ops[j], interout[j]),2)
+          iin = torch.cat((ops[j], interstack[j]),2)
           iout, (hinter[j], cinter[j]) = self.inter(iin,(hinter[j],cinter[j]))
           interout[j] = iout
           nbest = self.noungen(iout)
@@ -151,8 +151,16 @@ class model(nn.Module):
         vals, pidx = probs.topk(self.beamsize*2,0)
         vals = vals.squeeze()
         pidx = pidx.squeeze()
-        for k in range(self.beamsize):
-          tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op))
+        donectr = 0
+        k = -1
+        while donectr<self.beamsize:
+          k+=1
+          pdat = pidx[k].data[0]
+          if pdat == 2:
+            continue
+          else:
+            tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op))
+            donectr+=1
       tmp.sort(key=lambda x: x[0],reverse=True)
       newbeam = []
       newscore = []
@@ -186,6 +194,7 @@ class model(nn.Module):
             doneinters.append(inters[beamidx])
             donecounts.append(changecounts[beamidx])
             added += 1
+            j+=1
           else:
             j+=1
             continue

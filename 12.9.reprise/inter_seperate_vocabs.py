@@ -594,6 +594,7 @@ def main(args):
   print(args.savestr)
   for epoch in range(e,args.epochs):
     args.epoch = str(epoch)
+    print('epoch',epoch)
     trainloss = train(M,DS,args,jl)
     print("train loss epoch",epoch,trainloss)
     torch.save((M,jl),args.savestr+args.epoch)

@@ -118,7 +118,7 @@ class model(nn.Module):
     topscore =  donescores.index(max(donescores))
     return done[topscore]
       
-  def forward(self,inp,out=None):
+  def forward(self,inp,out=None,val=False):
     encenc = self.encemb(inp)
     enc,(h,c) = self.enc(encenc)
 
@@ -138,7 +138,7 @@ class model(nn.Module):
       if i == 0:
         prev = Variable(torch.cuda.LongTensor(inp.size(0),1).fill_(3))
       else:
-        if out is None:
+        if out is None or val:
           prev = self.gen(op).max(2)
           prev = prev[1]
         else:

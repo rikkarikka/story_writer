@@ -48,6 +48,19 @@ def s2s_hier_cats():
   parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-vmodel',type=str, default=None)
   parser.add_argument('-vmaxlen', type=int, default=10, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-vunk', type=int, default=1, help='min_freq for vocab [default: 1]') #
+  args = parser.parse_args()
+  mkdir(args)
+  return args
+
+def inter_cats():
+  parser = general()
+  parser.add_argument('-datafile', type=str, default="data/train_hier_cats.pt")
+  parser.add_argument('-savestr',type=str,default="saved_models/inter_cats/")
+  parser.add_argument('-interfile',type=str,default="data/train.cats")
+  parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-vmodel',type=str, default=None)
+  parser.add_argument('-vmaxlen', type=int, default=10, help='min_freq for vocab [default: 1]') #
   args = parser.parse_args()
   mkdir(args)
   return args

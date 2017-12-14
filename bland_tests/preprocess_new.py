@@ -49,6 +49,16 @@ class load_data:
         new.append(self.pad_batch(([src[i]],tgt[i]),targ=targ))
     return new
 
+  def val_data(self,fn,targ=True):
+    src,tgt = self.ds(fn)
+    tgt = [x[0] for x in tgt]
+    data = list(zip(src,tgt))
+    data.sort(key=lambda x:len(x[0]),reverse=True)
+    batches = self.batches(data)
+    batches = [self.pad_batch(batch) for batch in batches]
+    return batches
+
+
   def pad_batch(self,batch,targ=True):
     srcs,tgts = batch
     targs = tgts

@@ -176,6 +176,9 @@ class model(nn.Module):
         pdat = pidx.data[0]
         new = beam[beamidx]+[pdat]
         sentlen = sents[beamidx]
+        if pdat == 2:
+          j+=1
+          continue
         if pdat in self.punct:
           sentlen+=1
         if pdat == self.endtok or sentlen>4:
@@ -187,6 +190,7 @@ class model(nn.Module):
             doneinters.append(inters[beamidx])
             donecounts.append(changecounts[beamidx])
             added += 1
+            j+=1
           else:
             j+=1
             continue
@@ -232,39 +236,103 @@ class model(nn.Module):
     print(donecounts[topscore])
     return done[topscore], doneattns[topscore], doneinters[topscore]
 
-  def badbeams(self,inp):
-    #inp = inp.unsqueeze(0)
+  def lastbeam(self,inp):
     encenc = self.encemb(inp)
-    enc,(h,c) = self.enc(encenc)
+    enc,(oh,oc) = self.enc(encenc)
 
     #enc hidden has bidirection so switch those to the features dim
-    he = torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) 
-    ce = torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) 
-    h = [torch.cat([h[0:h.size(0):2], h[1:h.size(0):2]], 2) for i in range(self.beamsize)]
-    c = [torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) for i in range(self.beamsize)]
-    encbeam = [enc for i in range(self.beamsize)]
-    
+    h = torch.cat([oh[0:oh.size(0):2], oh[1:oh.size(0):2]], 2) 
+    c = torch.cat([oc[0:oc.size(0):2], oc[1:oc.size(0):2]], 2) 
+
+    # beamsearch the cats
+
+
     hinter = []
     cinter = []
     interout = []
-    nprev = []
-    vprev = []
-    interstack = []
     for i in range(self.beamsize):
-      hinter.append(Variable(he.data).contiguous())
-      cinter.append(Variable(ce.data).contiguous())
-      iout, (hinter[i], cinter[i]) = self.inter(Variable(torch.cuda.FloatTensor(1,1,self.args.hsz*2).zero_()),
-                                                (hinter[i],cinter[i]))
-      interout.append(iout)
+      hinter.append(Variable(h.data))
+      cinter.append(Variable(c.data))
+    #decode inter
+    interout = [ Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()) for _ in range(self.beamsize)]
+    interstack = []
+    for _ in range(self.beamsize):
+      inn = (Variable(torch.cuda.LongTensor(1,1).fill_(3),volatile=True),
+          Variable(torch.cuda.LongTensor(1,1).fill_(3),volatile=True))
+      interstack.append(inn)
 
-      nbest = self.noungen(iout)
-      _,nmax = torch.max(nbest,2)
-      vbest = self.verbgen(iout)
-      _,vmax = torch.max(vbest,2)
-      nemb = self.internoun(nmax)
-      vemb = self.interverb(vmax)
-      #print(nemb.size(),vemb.size())
-      interstack.append(torch.cat((nemb,vemb),2))
+    
+    outputs = []
+    outp = self.args.vmaxlen//2
+
+    scores = [0 for _ in range(self.beamsize)]
+    beam = [[] for _ in range(self.beamsize)]
+    for k in range(0,outp): 
+      for j in range(self.beamsize):
+        n,v = interstack[j]
+        n = self.internoun(n)
+        v = self.interverb(v)
+        nv = torch.cat((n,v),2)
+        iin = torch.cat((interout[j], nv),2)
+        iout, (hx,cx) = self.inter(iin,(hinter[j],cinter[j]))
+        op2 = self.noungen(iout)
+        op2 = op2.squeeze()
+        probs = F.log_softmax(op2)
+        vals, pidx = probs.topk(self.beamsize*2,0)
+        vals = vals.squeeze()
+        pidx = pidx.squeeze()
+        op = self.verbgen(iout)
+        op = op.squeeze()
+        probs = F.log_softmax(op)
+        vals2, pidx2 = probs.topk(self.beamsize*2,0)
+        vals2 = vals2.squeeze()
+        pidx2 = pidx2.squeeze()
+        tmp = []
+        for k in range(self.beamsize):
+          tmp.append((vals[k].data[0]+scores[j]+vals2[k].data[0],pidx[k],pidx2[k],j,hx,cx,iout))
+      tmp.sort(key=lambda x: x[0],reverse=True)
+      newbeam = []
+      newscore = []
+      newh = []
+      newc = []
+      newinterout = []
+      newstack = []
+      added = 0
+      newcounts = []
+      j = 0
+      while added < len(beam):
+        v,pidx,pidx2,beamidx,hx,cx,iout = tmp[j]
+        pdat = pidx.data[0]
+        pdat2 = pidx2.data[0]
+        new = beam[beamidx]+[pdat,pdat2]
+        if new not in newbeam:
+            newbeam.append(new)
+            newscore.append(v)
+            newh.append(hx)
+            newc.append(cx)
+            newinterout.append(iout)
+            newstack.append((pidx.unsqueeze(1),pidx2.unsqueeze(1)))
+            added += 1
+        j+=1
+      beam = newbeam 
+      scores = newscore
+      interout = newinterout
+      hinter = newh
+      interstack = newstack
+      cinter = newc
+    topscore =  scores.index(max(scores))
+    beam = beam[topscore]
+    nsel = beam[::2]+[1]
+    vsel = beam[1::2]+[1]
+    nvar = Variable(torch.cuda.LongTensor(nsel)).unsqueeze(0)
+    vvar = Variable(torch.cuda.LongTensor(vsel)).unsqueeze(0)
+    nenc = self.internoun(nvar)
+    venc = self.interverb(vvar)
+    voutputs = torch.cat((nenc,venc),2)
+
+    h = [torch.cat([oh[0:oh.size(0):2], oh[1:oh.size(0):2]], 2) for i in range(self.beamsize)]
+    c = [torch.cat([oc[0:oc.size(0):2], oc[1:oc.size(0):2]], 2) for i in range(self.beamsize)]
+    encbeam = [enc for i in range(self.beamsize)]
 
     ops = [Variable(torch.cuda.FloatTensor(1,1,self.args.hsz).zero_()) for i in range(self.beamsize)]
     prev = [Variable(torch.cuda.LongTensor(1,1).fill_(3)) for i in range(self.beamsize)]
@@ -273,39 +341,31 @@ class model(nn.Module):
     sents = [0]*self.beamsize
     done = []
     donescores = []
+    doneencbeam = []
     doneattns = []
-    attns = [[] for _ in range(self.beamsize)]
     for i in range(self.args.maxlen):
+      if not beam:
+        break
       tmp = []
       for j in range(len(beam)):
-        changej = 0
-        for t in self.punct:
-          changej += prev[j].squeeze().data.eq(t)[0]
-        if changej>0:
-          iin = torch.cat((ops[j], interout[j]),2)
-          iout, (hinter[j], cinter[j]) = self.inter(iin,(hinter[j],cinter[j]))
-          interout[j] = iout
-          nbest = self.noungen(iout)
-          #print(nbest.size())
-          _,nmax = torch.max(nbest,2)
-          vbest = self.verbgen(iout)
-          _,vmax = torch.max(vbest,2)
-          nemb = self.internoun(nmax)
-          vemb = self.interverb(vmax)
-          interstack[j] = torch.cat((nemb,vemb),2)
         dembedding = self.decemb(prev[j].view(1,1))
-        #print(dembedding.size(),ops[j].size(),interstack[j].size())
-        decin = torch.cat((dembedding.squeeze(1),ops[j].squeeze(0),interstack[j].squeeze(0)),1).unsqueeze(1)
-        decout, (hx,cx) = self.dec(decin,(h[j],c[j]))
+        decin = torch.cat((dembedding,ops[j]),2)
+        decout, (h[j],c[j]) = self.dec(decin,(h[j],c[j]))
 
         #attend on enc 
         q = self.linin(decout.squeeze(1)).unsqueeze(2)
         #q = decout.view(decout.size(0),decout.size(2),decout.size(1))
         w = torch.bmm(enc,q).squeeze(2)
         w = self.sm(w)
-        attns[j].append(w)
         cc = torch.bmm(w.unsqueeze(1),enc)
-        op = torch.cat((cc,decout),2)
+
+        #attend on vencoding
+        vq = self.dvlinin(decout.squeeze(1)).unsqueeze(2)
+        vw = torch.bmm(voutputs,vq).squeeze(2)
+        vw = self.sm(vw)
+        vcc = torch.bmm(vw.unsqueeze(1),voutputs)
+
+        op = torch.cat((cc,decout,vcc),2)
         op = self.drop(self.tanh(self.linout(op)))
       
         op2 = self.gen(op)
@@ -315,7 +375,7 @@ class model(nn.Module):
         vals = vals.squeeze()
         pidx = pidx.squeeze()
         for k in range(self.beamsize):
-          tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op))
+          tmp.append((vals[k].data[0]+scores[j],pidx[k],j,h[j],c[j],op))
       tmp.sort(key=lambda x: x[0],reverse=True)
       newbeam = []
       newscore = []
@@ -324,57 +384,53 @@ class model(nn.Module):
       newc = []
       newops = []
       newprev = []
-      newinterout = []
-      newhinter = []
-      newcinter = []
-      newattns = []
       added = 0
       j = 0
       while added < len(beam):
         v,pidx,beamidx,hx,cx,op = tmp[j]
         pdat = pidx.data[0]
         new = beam[beamidx]+[pdat]
+        sentlen = sents[beamidx]
+        if pdat == 2:
+          j+=1
+          continue
         if pdat in self.punct:
-          newsents.append(sents[beamidx]+1)
-        else:
-          newsents.append(sents[beamidx])
-        if pdat == self.endtok or newsents[-1]>4:
+          sentlen+=1
+        if pdat == self.endtok or sentlen>4:
           if new not in done:
             done.append(new)
             donescores.append(v)
-            doneattns.append(attns[beamidx])
             added += 1
+            j+=1
+          else:
+            j+=1
+            continue
         else:
           if new not in newbeam:
+            newsents.append(sentlen)
             newbeam.append(new)
             newscore.append(v)
             newh.append(hx)
             newc.append(cx)
-            newhinter.append(hinter[beamidx])
-            newcinter.append(cinter[beamidx])
             newops.append(op)
             newprev.append(pidx)
-            newattns.append(attns[beamidx])
-            newinterout.append(interout[beamidx])
             added += 1
         j+=1
       beam = newbeam 
       prev = newprev
       scores = newscore
       sents = newsents
-      interout = newinterout
       h = newh
       c = newc
       ops = newops
     if len(done)==0:
       done.extend(beam)
       donescores.extend(scores)
-      doneattns.extend(attns)
     donescores = [x/len(done[i]) for i,x in enumerate(donescores)]
-    print(donescores)
     topscore =  donescores.index(max(donescores))
-    return done[topscore], doneattns[topscore]
-      
+
+    return done[topscore],nsel,vsel
+
   def forward(self,inp,verbs,nouns,out=None):
     encenc = self.encemb(inp)
     enc,(h,c) = self.enc(encenc)
@@ -489,12 +545,14 @@ def validate(M,DS,args):
   refs = []
   hyps = []
   for sources,targets in data:
+    title = [DS.itos[x] for x in sources[0]]
+    print(" ".join(title))
     sources = Variable(sources.cuda(),volatile=True)
     M.zero_grad()
     #logits = M(sources,None)
     #logits = torch.max(logits.data.cpu(),2)[1]
     #logits = [list(x) for x in logits]
-    logits = M.beamsearch(sources)
+    logits = M.lastbeam(sources)
     hyp = [DS.vocab[x] for x in logits]
     hyps.append(hyp)
     refs.append(targets)

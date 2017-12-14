@@ -2,6 +2,8 @@
 */*pycache*/*
 *.swp
 saved_models/*
+lastcall.12.13/saved_models/*
+lastcall.12.13/models/*
 bland_tests/saved_models/*
 11.28.cleanup/saved_models/*
 12.5.redux/saved_models/*

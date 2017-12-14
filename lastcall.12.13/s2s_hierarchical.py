@@ -117,6 +117,9 @@ class model(nn.Module):
         pdat = pidx.data[0]
         new = beam[beamidx]+[pdat]
         sentlen = sents[beamidx]
+        if pdat == 2:
+          j+=1
+          continue
         if pdat in self.punct:
           sentlen+=1
         if pdat == self.endtok or sentlen>4:

@@ -85,15 +85,21 @@ class model(nn.Module):
         v,pidx,beamidx,hx,cx,op = tmp[j]
         pdat = pidx.data[0]
         new = beam[beamidx]+[pdat]
+        sentlen = sents[beamidx]
+        if pdat == 2:
+          j+=1
+          continue
         if pdat in self.punct:
-          newsents.append(sents[beamidx]+1)
-        else:
-          newsents.append(sents[beamidx])
-        if pdat == self.endtok or newsents[-1]>4:
+          sentlen+=1
+        if pdat == self.endtok or sentlen>4:
           if new not in done:
             done.append(new)
             donescores.append(v)
             added += 1
+            j+=1
+          else:
+            j+=1
+            continue
         else:
           if new not in newbeam:
             newbeam.append(new)

@@ -9,7 +9,9 @@ from torch.autograd import Variable
 from nltk.translate.bleu_score import SmoothingFunction, corpus_bleu
 from preprocess_new import load_data
 from arguments import s2s_bland as parseParams
+from s2s_bland import model
 
+'''
 class model(nn.Module):
   def __init__(self,args):
     super().__init__()
@@ -162,11 +164,11 @@ class model(nn.Module):
 
     outputs = torch.cat(outputs,1)
     return outputs
-
+'''
 
 def validate(M,DS,args):
   print(args.valid)
-  data = DS.new_data(args.valid,targ=True)
+  data = DS.val_data(args.valid)
   cc = SmoothingFunction()
   M.eval()
   refs = []
@@ -179,11 +181,8 @@ def validate(M,DS,args):
     sources = Variable(sources.cuda(),volatile=True)
     targets = Variable(targets.cuda(),volatile=True)
     M.zero_grad()
-    logits = M(sources)
-    logits = logits.repeat(targets.size(0),1,1)
-    size = min(logits.size(1),targets.size(1))
-    targets = targets[:,:size].contiguous()
-    logits = logits[:,:size,:].contiguous()
+    logits = M(sources,targets,val=True)
+      
     loss = criterion(logits.view(-1,logits.size(2)),targets.view(-1))
     trainloss.append(loss.data.cpu()[0])
   return sum(trainloss)/len(trainloss)
