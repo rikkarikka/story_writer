@@ -374,8 +374,16 @@ class model(nn.Module):
         vals, pidx = probs.topk(self.beamsize*2,0)
         vals = vals.squeeze()
         pidx = pidx.squeeze()
-        for k in range(self.beamsize):
-          tmp.append((vals[k].data[0]+scores[j],pidx[k],j,h[j],c[j],op))
+        donectr = 0
+        k = -1
+        while donectr<self.beamsize:
+          k+=1
+          pdat = pidx[k].data[0]
+          if pdat == 2:
+            continue
+          else:
+            tmp.append((vals[k].data[0]+scores[j],pidx[k],j,h[j],c[j],op,sents[j]))
+            donectr+=1
       tmp.sort(key=lambda x: x[0],reverse=True)
       newbeam = []
       newscore = []
@@ -387,10 +395,9 @@ class model(nn.Module):
       added = 0
       j = 0
       while added < len(beam):
-        v,pidx,beamidx,hx,cx,op = tmp[j]
+        v,pidx,beamidx,hx,cx,op,sentlen = tmp[j]
         pdat = pidx.data[0]
         new = beam[beamidx]+[pdat]
-        sentlen = sents[beamidx]
         if pdat == 2:
           j+=1
           continue
@@ -415,7 +422,7 @@ class model(nn.Module):
             newops.append(op)
             newprev.append(pidx)
             added += 1
-        j+=1
+          j+=1
       beam = newbeam 
       prev = newprev
       scores = newscore

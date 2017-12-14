@@ -87,6 +87,7 @@ def s2s_inter():
   parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-resume_pre', type=str, default=None)
   parser.add_argument('-vmodel',type=str, default=None)
+  parser.add_argument('-vunk', type=int, default=1, help='min_freq for vocab [default: 1]') #
   args = parser.parse_args()
   #args.savestr = args.savestr+args.interfile.split("/")[-1]+"/"
   mkdir(args)
