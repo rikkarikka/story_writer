@@ -290,18 +290,22 @@ class surface(nn.Module):
         v,pidx,beamidx,hx,cx,op = tmp[j]
         pdat = pidx.data[0]
         new = beam[beamidx]+[pdat]
+        sentsize = sents[beamidx]
         if pdat in self.punct:
-          newsents.append(sents[beamidx]+1)
-        else:
-          newsents.append(sents[beamidx])
-        if pdat == self.endtok or newsents[-1]>4:
+          sentsize += 1
+        if pdat == self.endtok or sentsize>4:
           if new not in done:
             done.append(new)
             donescores.append(v)
             doneattns.append(attns[beamidx])
             added += 1
+            j+=1
+          else:
+            j+=1
+            continue
         else:
           if new not in newbeam:
+            newsents.append(sentsize)
             newbeam.append(new)
             newscore.append(v)
             newh.append(hx)

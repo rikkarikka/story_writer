@@ -31,6 +31,7 @@ def validate(S,DS,args,m):
   titles = []
   for sources,targets in data:
     sources = Variable(sources,requires_grad=False)
+    print(sources)
     logits,a,v = S.beamsearch(sources)
     attns.append(torch.cat(a,0))
     verbs = [DS.verb_vocab[x] for x in v]
