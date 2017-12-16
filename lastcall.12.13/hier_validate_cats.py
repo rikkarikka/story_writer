@@ -35,6 +35,7 @@ def validate(S,DS,args,m):
   for sources,targets in data:
     title = [DS.itos[x] for x in sources[0]]
     titles.append(" ".join(title))
+    print(titles[-1])
     sources = Variable(sources,requires_grad=False)
     logits = []
     attn = []
@@ -74,6 +75,37 @@ def validate(S,DS,args,m):
       f.write('\n'.join(refstr))
   return bleu
 
+
+def greedy_val(S,DS,args,m):
+  print(m,args.valid)
+  S.beamsize = args.beamsize
+  data = DS.new_data(args.valid)
+  cc = SmoothingFunction()
+  S.eval()
+  refs = []
+  hyps = []
+  attns = []
+  inters = []
+  titles = []
+  for sources,targets in data:
+    title = [DS.itos[x] for x in sources[0]]
+    titles.append(" ".join(title))
+    print(titles[-1])
+    sources = Variable(sources,volatile=True)
+    logits = []
+    attn = []
+    l, n, v = S.forward(sources)
+    preds = torch.max(l[0],2)
+    nouns = torch.max(n,2)
+    verbs = torch.max(v,2)
+    hyp = [DS.vocab[x] for x in preds]
+    hyps.append(hyp)
+    print(' '.join(hyp[:-1]))
+    verbs = [x[1].cpu().data[0][0] for x in i]
+    print([DS.noun_vocab[x] for x in nouns])
+    print([DS.verb_vocab[x] for x in verbs])
+
+
 def main(args,m):
   DS = torch.load(args.datafile)
   DS.args = args
@@ -90,7 +122,8 @@ def main(args,m):
   S.endtok = DS.vocab.index("<eos>")
   S.vendtok = DS.verb_vocab.index("<eos>")
   S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
-  validate(S,DS,args,m)
+  #validate(S,DS,args,m)
+  greedy_val(S,DS,args,m)
 
 if __name__=="__main__":
   args = parseParams()

@@ -13,7 +13,7 @@ def general():
   parser.add_argument('-layers', type=int, default=2, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-drop', type=float, default=0.3, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-bsz', type=int, default=100, help='min_freq for vocab [default: 1]') #
-  parser.add_argument('-hsz', type=int, default=500, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-hsz', type=int, default=400, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-maxlen', type=int, default=75, help='min_freq for vocab [default: 1]') #
   parser.add_argument('-lr', type=float, default=0.001, help='initial learning rate [default: 0.001]') #
   parser.add_argument('-epochs', type=int, default=30, help='number of epochs for train [default: 100]') #
@@ -22,6 +22,7 @@ def general():
   parser.add_argument('-train',type=str,default="data/train.all.txt")
   parser.add_argument('-valid',type=str,default="data/valid.5.txt")
   parser.add_argument('-cuda',type=s2bool,default=True)
+  parser.add_argument('-esz', type=int, default=200, help='min_freq for vocab [default: 1]') #
   return parser
 
 def mkdir(args):

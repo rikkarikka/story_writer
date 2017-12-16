@@ -78,8 +78,6 @@ def main(args,m):
   S.enc.flatten_parameters()
   S.args = args
   S.endtok = DS.vocab.index("<eos>")
-  S.vendtok = DS.verb_vocab.index("<eos>")
-  S.punct = [DS.vocab.index(t) for t in ['.','!','?']]
   validate(S,DS,args,m)
 
 if __name__=="__main__":

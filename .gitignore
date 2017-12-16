@@ -3,6 +3,7 @@
 *.swp
 saved_models/*
 lastcall.12.13/saved_models/*
+lastcall.12.13/small_models/*
 lastcall.12.13/models/*
 bland_tests/saved_models/*
 11.28.cleanup/saved_models/*

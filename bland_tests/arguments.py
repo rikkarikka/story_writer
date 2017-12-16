@@ -1,5 +1,10 @@
 import os
 import argparse
+def s2bool(v):
+  if v.lower()=='false':
+    return False
+  else:
+    return True
 
 def general():
   parser = argparse.ArgumentParser(description='none')
@@ -15,6 +20,7 @@ def general():
   parser.add_argument('-resume', type=str, default=None)
   parser.add_argument('-train',type=str,default="data/train.all.txt")
   parser.add_argument('-valid',type=str,default="data/valid.5.txt")
+  parser.add_argument('-cuda',type=s2bool,default=True)
   return parser
 
 def mkdir(args):
@@ -28,6 +34,7 @@ def s2s_bland():
   parser.add_argument('-datafile', type=str, default="data/bland.pt")
   parser.add_argument('-savestr',type=str,default="saved_models/bland/")
   parser.add_argument('-beamsize', type=int, default=4, help='min_freq for vocab [default: 1]') #
+  parser.add_argument('-vmodel',type=str, default=None)
   args = parser.parse_args()
   mkdir(args)
   return args

@@ -161,6 +161,10 @@ class model(nn.Module):
           else:
             tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op,sents[j]))
             donectr+=1
+        '''
+        for k in range(self.beamsize):
+          tmp.append((vals[k].data[0]+scores[j],pidx[k],j,hx,cx,op,sents[j]))
+        '''
       tmp.sort(key=lambda x: x[0],reverse=True)
       newbeam = []
       newscore = []
@@ -239,7 +243,7 @@ class model(nn.Module):
     return done[topscore], doneattns[topscore], doneinters[topscore]
 
       
-  def forward(self,inp,verbs,nouns,out=None):
+  def forward(self,inp,verbs=None,nouns=None,out=None):
     encenc = self.encemb(inp)
     enc,(h,c) = self.enc(encenc)
 
@@ -248,9 +252,13 @@ class model(nn.Module):
     c = torch.cat([c[0:c.size(0):2], c[1:c.size(0):2]], 2) 
 
     #embed nouns & verbs
-    nemb = self.internoun(nouns)
-    vemb = self.interverb(verbs)
-    info = torch.cat((nemb,vemb),2)
+    if nouns:
+      nemb = self.internoun(nouns)
+      vemb = self.interverb(verbs)
+      info = torch.cat((nemb,vemb),2)
+    else:
+      info = Variable(torch.cuda.FloatTensor(1,7,self.args.hsz*2).zero_())
+      
 
     hinter = []
     cinter = []
@@ -265,6 +273,14 @@ class model(nn.Module):
       interout.append(iout)
       nlogits.append([self.noungen(iout)])
       vlogits.append([self.verbgen(iout)])
+      if not nouns:
+        _,n = torch.max(nlogits[-1][0],2)
+        _,v = torch.max(vlogits[-1][0],2)
+        nv = self.internoun(n)
+        vv = self.interverb(v)
+        print(vv.size())
+        info[0,0,:] = torch.cat((nv,vv),2).squeeze()
+        
 
 
     if self.args.cuda:
@@ -282,7 +298,7 @@ class model(nn.Module):
       outp = self.args.maxlen
     else:
       outp = out.size(1)
-
+    s = 1
     for i in range(outp): 
       if i == 0:
         prev = Variable(torch.cuda.LongTensor(inp.size(0),1).fill_(3))
@@ -294,6 +310,10 @@ class model(nn.Module):
           prev = out[:,i-1].unsqueeze(1)
         changeidx = changeidx.zero_()
         for t in self.punct:
+          n = torch.max(nlogits[-1],2)
+          v = torch.max(nlogits[-1],2)
+          nmax.append(n)
+          vmax.append(v)
           changeidx.add_(prev.squeeze().data.eq(t).long())
         changes = changeidx.nonzero()
         changed = False
@@ -306,8 +326,16 @@ class model(nn.Module):
           nlogits[k].append(self.noungen(iout))
           vlogits[k].append(self.verbgen(iout))
           changed=True
+          if not nouns:
+            _,n = torch.max(nlogits[k][-1],2)
+            _,v = torch.max(vlogits[k][-1],2)
+            nv = self.internoun(n)
+            vv = self.interverb(v)
+            info[k,s,:] = torch.cat((nv,vv),2).squeeze()
+            s+=1
         if changed:
           interstack = torch.stack(([info[i,infostack[i],:] for i in range(inp.size(0))]),0).squeeze(1)
+            
         op = op.squeeze(1)
           
 
